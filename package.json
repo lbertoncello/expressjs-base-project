@@ -1,0 +1,31 @@
+{
+  "name": "express-js-base-project",
+  "version": "1.0.0",
+  "description": "A boilerplate to start new ExpressJS projects",
+  "main": "index.js",
+  "repository": "https://github.com/lbertoncello/expressjs-base-project",
+  "author": "lbertoncello",
+  "license": "MIT",
+  "private": false,
+  "type": "module",
+  "devDependencies": {
+    "markdown-notes-tree": "^1.12.0"
+  },
+  "scripts": {
+    "start": "node src/main/app.js"
+  },
+  "dependencies": {
+    "app-root-path": "^3.1.0",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-mongo-sanitize": "^2.2.0",
+    "express-rate-limit": "^6.7.0",
+    "helmet": "^6.1.5",
+    "lodash": "^4.17.21",
+    "mongoose": "^7.1.0",
+    "morgan": "^1.10.0",
+    "xss-clean": "^0.1.1"
+  }
+}
