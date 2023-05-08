@@ -4,5 +4,4 @@ export const config = {
     jwtExp: process.env.JWT_EXPIRE,
   },
   dbUrl: process.env.MONGO_URI,
-  isDev: false,
 };
