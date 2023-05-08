@@ -8,8 +8,6 @@ const database = new GameDatabase();
 const repository = new GameRepository(database);
 const controller = new GameController(repository);
 
-router.route('/game')
-  .get(controller.test)
-  .post(controller.addGame.bind(controller));
+router.route('/game').get(controller.test).post(controller.addGame.bind(controller));
 
-export default router
+export default router;

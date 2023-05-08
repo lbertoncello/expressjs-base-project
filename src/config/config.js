@@ -9,31 +9,27 @@ const port = process.env.PORT || 3000;
 
 const baseConfig = {
   env,
-  isDev: env === 'development',
+  isDev: env === 'development' || env === 'dev',
   port,
-}
+};
 
-let envConfig = {};
+let envConfig = null;
 
 switch (env) {
   case 'dev':
   case 'development':
-    const devConfig = await import('./dev.js');
+    envConfig = (await import('./dev.js')).config;
 
-    envConfig = devConfig.config;
     break;
 
   case 'prod':
   case 'production':
-    const prodConfig = await import('./prod.js');
+    envConfig = (await import('./prod.js')).config;
 
-    envConfig = prodConfig.config;
     break;
 
   default:
-    const defaultConfig = await import('./dev.js');
-
-    envConfig = defaultConfig.config;
+    envConfig = (await import('./dev.js')).config;
 }
 
 export default _.merge(baseConfig, envConfig);

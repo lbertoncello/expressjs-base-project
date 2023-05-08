@@ -10,9 +10,9 @@ export const start = async () => {
     app.listen(config.port, () => {
       console.log(`API running on http://localhost:${config.port}/api/v1`);
       console.log(config.dbUrl);
-    })
+    });
   } catch (err) {
     console.error(err);
     console.log('It was not possible to initialize the server');
   }
-}
+};

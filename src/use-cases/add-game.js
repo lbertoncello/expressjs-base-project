@@ -12,7 +12,7 @@ export default class AddGame {
     }
 
     const game = new Game(title, rating, summary);
-    
+
     return await this.repository.create(game);
   }
 }

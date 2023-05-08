@@ -7,22 +7,22 @@ export default class GameRepository {
     return new Promise((resolve, reject) => {
       this.database(game).save();
       resolve(game);
-    })
+    });
   }
 
   getById(id) {
     return new Promise((resolve, reject) => {
-      this.database.find({ id }).then(game => {
+      this.database.find({ id }).then((game) => {
         resolve(game[0]);
-      })
-    })
+      });
+    });
   }
 
   getByTitle(title) {
     return new Promise((resolve, reject) => {
-      this.database.find({ title }).then(game => {
+      this.database.find({ title }).then((game) => {
         resolve(game[0]);
-      })
+      });
     });
   }
 
@@ -31,6 +31,6 @@ export default class GameRepository {
       const games = this.database.find();
 
       return games;
-    })
+    });
   }
 }

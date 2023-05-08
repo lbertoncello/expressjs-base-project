@@ -5,4 +5,4 @@ export const config = {
   },
   dbUrl: process.env.MONGO_URI,
   isDev: false,
-}
+};

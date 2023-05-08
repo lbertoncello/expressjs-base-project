@@ -1,9 +1,9 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const schema = new mongoose.Schema({
   title: String,
   rating: Number,
-  summary: String
+  summary: String,
 });
 
 export default schema;
