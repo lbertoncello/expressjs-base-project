@@ -2,9 +2,6 @@ import express from 'express';
 import loaders from '../loaders/loaders.js';
 import config from '../config/config.js';
 
-console.log('config: ', config)
-
-
 export const app = express();
 
 export const start = async () => {
