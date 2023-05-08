@@ -10,6 +10,7 @@ export default async (url = options.dbUrl, opts = {}) => {
   
     return connection;
   } catch (err) {
-    console.error('DB Error: ', err);
+    console.error('DB initialization ERROR');
+    throw err;
   }
 }

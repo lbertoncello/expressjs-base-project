@@ -19,30 +19,35 @@ const apiLimiter = rateLimit({
 })
 
 export default ({ app, express }) => {
-  app.disable('x-powered-by');
+  try {
+    app.disable('x-powered-by');
 
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: true }));
-
-  // Dev logging middleware
-  // TODO get this info from 'config'
-  if (process.env.NODE_ENV === 'development') {
-    app.use(morgan('dev'));
+    app.use(express.json());
+    app.use(express.urlencoded({ extended: true }));
+  
+    // Dev logging middleware
+    // TODO get this info from 'config'
+    if (process.env.NODE_ENV === 'development') {
+      app.use(morgan('dev'));
+    }
+  
+    app.enable('trust proxy');
+  
+    app.use(cors());
+    app.use(mongoSanitize());
+    // Add security headers
+    app.use(helmet());
+    app.use(xss());
+  
+    app.get('/ip', (req, res) => res.send(req.ip));
+    app.use('/api/v1', apiLimiter, routes);
+  
+    // Error 404 handler
+    app.use((req, res, next) => next(new Error('Route not found')));
+  
+    return app;
+  } catch (err) {
+    console.error('Express initialization ERROR');
+    throw err;
   }
-
-  app.enable('trust proxy');
-
-  app.use(cors());
-  app.use(mongoSanitize());
-  // Add security headers
-  app.use(helmet());
-  app.use(xss());
-
-  app.get('/ip', (req, res) => res.send(req.ip));
-  app.use('/api/v1', apiLimiter, routes);
-
-  // Error 404 handler
-  app.use((req, res, next) => next(new Error('Route not found')));
-
-  return app;
 }
