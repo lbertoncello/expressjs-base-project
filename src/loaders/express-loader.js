@@ -5,6 +5,7 @@ import helmet from 'helmet';
 import xss from 'xss-clean';
 import cors from 'cors';
 
+import config from '../config/config.js';
 import routes from '../routes/routes.js';
 
 const apiLimiter = rateLimit({
@@ -26,11 +27,11 @@ export default ({ app, express }) => {
     app.use(express.urlencoded({ extended: true }));
   
     // Dev logging middleware
-    // TODO get this info from 'config'
-    if (process.env.NODE_ENV === 'development') {
+    if (config.isDev) {
       app.use(morgan('dev'));
     }
   
+    // Add middlwares to improve security
     app.enable('trust proxy');
   
     app.use(cors());

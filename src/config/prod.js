@@ -4,4 +4,5 @@ export const config = {
     jwtExp: '7d'
   },
   dbUrl: process.env.MONGO_URI,
+  isDev: false,
 }

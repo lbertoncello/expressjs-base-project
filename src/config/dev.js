@@ -3,5 +3,6 @@ export const config = {
     jwt: process.env.JWT_SECRET_DEV,
     jwtExp: '100d',
   },
-  dbUrl: process.env.MONGO_URI_DEV
+  dbUrl: process.env.MONGO_URI_DEV,
+  isDev: true,
 }
