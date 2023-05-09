@@ -1,6 +1,5 @@
 {
   "*.{js,jsx,cjs,mjs}": [
-    "eslint . --ext .js,.jsx,.cjs,.mjs --fix",
-    "prettier --write src/"
+    "eslint . --ext .js,.jsx,.cjs,.mjs --fix"
   ]
 }

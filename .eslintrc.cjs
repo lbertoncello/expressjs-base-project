@@ -3,17 +3,16 @@ module.exports = {
     es2021: true,
     node: true,
   },
-  extends: 'standard',
-  overrides: [
-  ],
+  extends: ['standard', 'plugin:prettier/recommended'],
+  overrides: [],
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',
   },
+  plugins: ['prettier'],
   rules: {
-    'comma-dangle': [ 'error', 'only-multiline' ],
-    semi: [ 'error', 'always', { omitLastInOneLineBlock: true } ],
-    'object-curly-spacing': [ 'error', 'always' ],
-    'array-bracket-spacing': [ 'error', 'always' ]
-  }
+    'prettier/prettier': 'error',
+    'arrow-body-style': 'off',
+    'prefer-arrow-callback': 'off',
+  },
 };
