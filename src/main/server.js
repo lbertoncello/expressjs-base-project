@@ -1,6 +1,6 @@
 import express from 'express';
-import loaders from '../loaders/loaders.js';
-import config from '../config/config.js';
+import loaders from './loaders/loaders.js';
+import config from './config/config.js';
 
 export const app = express();
 

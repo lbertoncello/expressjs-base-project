@@ -1,7 +1,7 @@
 import express from 'express';
-import GameController from '../controllers/game-controller.js';
-import GameDatabase from '../data-access/database/game-database.js';
-import GameRepository from '../entities/repositories/game-repository.js';
+import GameController from '../../presentation/controllers/game-controller.js';
+import GameDatabase from '../../data-access/database/game-database.js';
+import GameRepository from '../../entities/repositories/game-repository.js';
 
 const router = express.Router();
 const database = new GameDatabase();

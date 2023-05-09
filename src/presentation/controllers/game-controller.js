@@ -2,7 +2,7 @@
 //   test: (request, response) => response.json({ test: 'SUCCESSFULL 2' })
 // })
 
-import AddGame from '../use-cases/add-game.js';
+import AddGame from '../../use-cases/add-game.js';
 
 export default class GameController {
   constructor(repository) {

@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import __dirname from '../utils/dirname.js';
+import __dirname from '../../utils/dirname.js';
 import dotenv from 'dotenv';
 
 dotenv.config({ path: __dirname + '/.env' });
