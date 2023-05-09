@@ -1,27 +1,21 @@
-// export default (repository) => Object.freeze({
-//   test: (request, response) => response.json({ test: 'SUCCESSFULL 2' })
-// })
-
 import AddGame from '../../use-cases/add-game.js';
+import SuccessResponse from '../responses/success-response.js';
+import ServerErrorResponse from '../responses/server-error-response.js';
 
 export default class GameController {
   constructor(repository) {
     this.repository = repository;
   }
 
-  test(request, response) {
-    return response.json({ test: 'SUCESSFULL' });
-  }
-
-  async addGame(req, res, next) {
+  async addGame(req) {
     try {
       const addGameUseCase = new AddGame(this.repository);
       const { title, rating, summary } = req.body;
       const result = await addGameUseCase.execute(title, rating, summary);
 
-      res.json(result);
+      return new SuccessResponse(result);
     } catch (err) {
-      next(err);
+      return new ServerErrorResponse(err.message);
     }
   }
 }

@@ -3,8 +3,8 @@ import ErrorResponse from '../../presentation/responses/error-response.js';
 
 export default (err, req, res, next) => {
   console.error(err);
-  let message = err.message;
-  let status = err.status;
+  let message = err.message || 'Servor error';
+  let status = err.status || 500;
 
   // mongoose duplicate error
   if (err.code === 11000) {
@@ -26,5 +26,5 @@ export default (err, req, res, next) => {
 
   const error = new ApplicationError(message, status);
 
-  res.status(error.status || 500).json(new ErrorResponse(error.message || 'Servor error'));
+  res.status(error.status).json(new ErrorResponse(error.status, error.message));
 };
