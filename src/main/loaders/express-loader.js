@@ -6,7 +6,7 @@ import xss from 'xss-clean';
 import cors from 'cors';
 
 import ApplicationError from '../../presentation/errors/application-error.js';
-import errorMiddleware from '../../presentation/errors/error-middleware.js';
+import errorMiddleware from '../middlewares/error-middleware.js';
 import config from '../config/config.js';
 import routes from '../routes/routes.js';
 

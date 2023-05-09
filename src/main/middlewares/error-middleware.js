@@ -1,4 +1,5 @@
-import ApplicationError from './application-error.js';
+import ApplicationError from '../../presentation/errors/application-error.js';
+import ErrorResponse from '../../presentation/responses/error-response.js';
 
 export default (err, req, res, next) => {
   console.error(err);
@@ -26,9 +27,5 @@ export default (err, req, res, next) => {
 
   error = new ApplicationError(message, status);
 
-  res.status(error.status || 500).json({
-    success: false,
-    message: error.message || 'Servor error',
-    data: {},
-  });
+  res.status(error.status || 500).json(new ErrorResponse(error.message || 'Servor error'));
 };
