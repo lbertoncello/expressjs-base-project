@@ -5,6 +5,8 @@ import helmet from 'helmet';
 import xss from 'xss-clean';
 import cors from 'cors';
 
+import ApplicationError from '../../presentation/errors/application-error.js';
+import errorMiddleware from '../../presentation/errors/error-middleware.js';
 import config from '../config/config.js';
 import routes from '../routes/routes.js';
 
@@ -13,7 +15,7 @@ const apiLimiter = rateLimit({
   max: 100, // Limit each IP to 100 requests per `window` (here, per 20 minutes)
   standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-  handler: (_request, res, _next) =>
+  handler: (request, res, next) =>
     res.status(429).json({
       status: false,
       message: 'Too many requests, please try again later.',
@@ -45,7 +47,10 @@ export default ({ app, express }) => {
     app.use('/api/v1', apiLimiter, routes);
 
     // Error 404 handler
-    app.use((req, res, next) => next(new Error('Route not found')));
+    app.use((req, res, next) => next(new ApplicationError('Route not found', 404)));
+
+    // Error handler
+    app.use(errorMiddleware);
 
     return app;
   } catch (err) {
