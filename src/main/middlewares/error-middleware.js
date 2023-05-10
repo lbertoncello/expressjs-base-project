@@ -1,5 +1,5 @@
 import ApplicationError from '../../presentation/errors/application-error.js';
-import ErrorResponse from '../../presentation/responses/error-response.js';
+import ApplicationErrorResponse from '../../presentation/responses/application-error-response.js';
 
 export default (err, req, res, next) => {
   console.error(err);
@@ -26,5 +26,5 @@ export default (err, req, res, next) => {
 
   const error = new ApplicationError(message, status);
 
-  res.status(error.status).json(new ErrorResponse(error.status, error.message));
+  res.status(error.status).json(new ApplicationErrorResponse(error.status, error.message).body);
 };

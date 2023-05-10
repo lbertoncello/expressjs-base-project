@@ -1,9 +1,10 @@
-export default class SuccessResponse {
+import HttpResponse from './http-response.js';
+
+export default class SuccessResponse extends HttpResponse {
   constructor(data) {
-    this.status = 200;
-    this.body = {
-      success: true,
-      data,
-    };
+    const status = 200;
+    const success = true;
+
+    super(status, success, data);
   }
 }
