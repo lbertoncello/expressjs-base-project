@@ -43,7 +43,7 @@ export default ({ app, express }) => {
     app.use(helmet());
     app.use(xss());
 
-    app.get('/ip', (req, res) => res.send(req.ip));
+    app.get('/test', (req, res) => res.json({ test: 'It is working!' }));
     app.use('/api/v1', apiLimiter, routes);
 
     // Error 404 handler
