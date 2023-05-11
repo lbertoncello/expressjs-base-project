@@ -1,3 +1,4 @@
+// TODO add some way to remove unwanted fields from the return
 export default class GameRepository {
   constructor(database) {
     this.database = database;
