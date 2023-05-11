@@ -1,6 +1,6 @@
 // TODO add validation
 // TODO encrypt password
-import User from '../entities/models/user.js';
+import User from '../entities/user.js';
 
 export default class AddUser {
   constructor(repository, encrypter) {

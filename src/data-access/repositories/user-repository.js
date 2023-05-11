@@ -4,11 +4,6 @@ export default class UserRepository {
   }
 
   async create(user) {
-    // return new Promise((resolve, reject) => {
-    //   this.database(user).save();
-    //   resolve(user);
-    // });
-
     const result = await this.database(user).save();
 
     return result;

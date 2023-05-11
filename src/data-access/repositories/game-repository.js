@@ -1,4 +1,3 @@
-// TODO move repositories to a more proper folder
 // TODO change Promises to async/await
 export default class GameRepository {
   constructor(database) {

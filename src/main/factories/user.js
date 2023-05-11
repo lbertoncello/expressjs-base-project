@@ -1,10 +1,9 @@
 import UserController from '../../presentation/controllers/user-controller.js';
 import UserDatabase from '../../data-access/database/user-database.js';
-import UserRepository from '../../entities/repositories/user-repository.js';
+import UserRepository from '../../data-access/repositories/user-repository.js';
 import BcryptAdapter from '../../data-access/crypto/bcrypt-adapter.js';
 
 export const makeUserController = () => {
-  // TODO get salt from env
   const database = new UserDatabase();
   const repository = new UserRepository(database);
   const bcryptAdapter = new BcryptAdapter();
