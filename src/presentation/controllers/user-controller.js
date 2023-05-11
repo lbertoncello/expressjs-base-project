@@ -1,4 +1,4 @@
-import AddUser from '../../use-cases/add-user.js';
+import SignUp from '../../use-cases/user/signup.js';
 import SuccessResponse from '../responses/success-response.js';
 import ServerErrorResponse from '../responses/server-error-response.js';
 
@@ -8,15 +8,15 @@ export default class UserController {
     this.encrypter = encrypter;
   }
 
-  async addUser(req) {
+  async signUp(req) {
     try {
-      const addUserUseCase = new AddUser(this.repository, this.encrypter);
+      const signUpUseCase = new SignUp(this.repository, this.encrypter);
       const { name, email, password } = req.body;
 
       if (!(name && email && password)) {
         throw new Error('Not all parameters were informed');
       }
-      const result = await addUserUseCase.execute(name, email, password);
+      const result = await signUpUseCase.execute(name, email, password);
 
       return new SuccessResponse(result);
     } catch (err) {

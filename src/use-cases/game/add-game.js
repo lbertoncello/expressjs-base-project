@@ -1,4 +1,4 @@
-import Game from '../entities/game.js';
+import Game from '../../entities/game.js';
 
 export default class AddGame {
   constructor(repository) {

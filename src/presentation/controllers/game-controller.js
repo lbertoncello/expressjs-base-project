@@ -1,4 +1,4 @@
-import AddGame from '../../use-cases/add-game.js';
+import AddGame from '../../use-cases/game/add-game.js';
 import SuccessResponse from '../responses/success-response.js';
 import ServerErrorResponse from '../responses/server-error-response.js';
 

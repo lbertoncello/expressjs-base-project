@@ -5,6 +5,6 @@ import { makeUserController } from '../factories/user.js';
 const router = express.Router();
 const controller = makeUserController();
 
-router.route('/user').post(adaptRoute(controller.addUser.bind(controller)));
+router.route('/user').post(adaptRoute(controller.signUp.bind(controller)));
 
 export default router;

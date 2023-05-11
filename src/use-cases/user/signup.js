@@ -1,8 +1,8 @@
 // TODO add validation
 // TODO encrypt password
-import User from '../entities/user.js';
+import User from '../../entities/user.js';
 
-export default class AddUser {
+export default class SignUp {
   constructor(repository, encrypter) {
     this.repository = repository;
     this.encrypter = encrypter;
