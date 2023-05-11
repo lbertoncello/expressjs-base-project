@@ -7,6 +7,6 @@ export default class ServerErrorResponse extends HttpResponse {
     const status = 500;
 
     super(status, success, data);
-    this.body.message = `Server Error: ${message}`;
+    this.body.message = `Internal Server Error`;
   }
 }

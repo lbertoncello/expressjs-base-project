@@ -11,4 +11,8 @@ export default class BcryptAdapter {
 
     return hash;
   }
+
+  async compare(value, encryptedValue) {
+    return await bcrypt.compare(value, encryptedValue);
+  }
 }

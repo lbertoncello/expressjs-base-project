@@ -15,6 +15,7 @@ export default class GameController {
 
       return new SuccessResponse(result);
     } catch (err) {
+      console.error(err);
       return new ServerErrorResponse(err.message);
     }
   }

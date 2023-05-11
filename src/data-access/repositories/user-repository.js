@@ -21,6 +21,12 @@ export default class UserRepository {
     return result[0];
   }
 
+  async getByEmailWithPassword(email) {
+    const result = await this.database.findOne({ email }).select('+password');
+
+    return result;
+  }
+
   async getAll() {
     const result = await this.database.find();
 
