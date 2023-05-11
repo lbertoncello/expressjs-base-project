@@ -3,8 +3,9 @@
 import User from '../entities/models/user.js';
 
 export default class AddUser {
-  constructor(repository) {
+  constructor(repository, encrypter) {
     this.repository = repository;
+    this.encrypter = encrypter;
   }
 
   async execute(name, email, password) {
@@ -13,7 +14,8 @@ export default class AddUser {
       throw new Error('User already exists');
     }
 
-    const user = new User(name, email, password);
+    const encryptedPassword = await this.encrypter.encrypt(password);
+    const user = new User(name, email, encryptedPassword);
 
     return await this.repository.create(user);
   }

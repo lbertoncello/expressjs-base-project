@@ -3,13 +3,14 @@ import SuccessResponse from '../responses/success-response.js';
 import ServerErrorResponse from '../responses/server-error-response.js';
 
 export default class UserController {
-  constructor(repository) {
+  constructor(repository, encrypter) {
     this.repository = repository;
+    this.encrypter = encrypter;
   }
 
   async addUser(req) {
     try {
-      const addUserUseCase = new AddUser(this.repository);
+      const addUserUseCase = new AddUser(this.repository, this.encrypter);
       const { name, email, password } = req.body;
 
       if (!(name && email && password)) {
