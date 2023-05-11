@@ -1,37 +1,29 @@
-// TODO change Promises to async/await
 export default class GameRepository {
   constructor(database) {
     this.database = database;
   }
 
-  create(game) {
-    return new Promise((resolve, reject) => {
-      this.database(game).save();
-      resolve(game);
-    });
+  async create(game) {
+    const result = await this.database(game).save();
+
+    return result;
   }
 
-  getById(id) {
-    return new Promise((resolve, reject) => {
-      this.database.find({ id }).then((game) => {
-        resolve(game[0]);
-      });
-    });
+  async getById(id) {
+    const result = await this.database.find({ id });
+
+    return result[0];
   }
 
-  getByTitle(title) {
-    return new Promise((resolve, reject) => {
-      this.database.find({ title }).then((game) => {
-        resolve(game[0]);
-      });
-    });
+  async getByTitle(title) {
+    const result = await this.database.find({ title });
+
+    return result[0];
   }
 
-  getAll() {
-    return new Promise((resolve, reject) => {
-      const games = this.database.find();
+  async getAll() {
+    const result = await this.database.find();
 
-      return games;
-    });
+    return result[0];
   }
 }
