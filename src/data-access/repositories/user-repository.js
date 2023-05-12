@@ -10,15 +10,15 @@ export default class UserRepository {
   }
 
   async getById(id) {
-    const result = await this.database.find({ id });
+    const result = await this.database.findOne({ id });
 
-    return result[0];
+    return result;
   }
 
   async getByEmail(email) {
-    const result = await this.database.find({ email });
+    const result = await this.database.findOne({ email });
 
-    return result[0];
+    return result;
   }
 
   async getByEmailWithPassword(email) {

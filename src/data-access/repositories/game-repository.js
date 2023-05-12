@@ -11,15 +11,15 @@ export default class GameRepository {
   }
 
   async getById(id) {
-    const result = await this.database.find({ id });
+    const result = await this.database.findOne({ id });
 
-    return result[0];
+    return result;
   }
 
   async getByTitle(title) {
-    const result = await this.database.find({ title });
+    const result = await this.database.findOne({ title });
 
-    return result[0];
+    return result;
   }
 
   async getAll() {
