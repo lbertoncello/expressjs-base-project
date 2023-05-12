@@ -13,8 +13,12 @@ export default class JwtAdapter {
   }
 
   async verify(token) {
-    const decodedToken = await jwt.decode(token, this.secret);
+    try {
+      const decodedToken = await jwt.verify(token, this.secret);
 
-    return decodedToken;
+      return decodedToken;
+    } catch (err) {
+      return null;
+    }
   }
 }
