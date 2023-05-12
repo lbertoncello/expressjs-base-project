@@ -1,7 +1,17 @@
 export const MongooseHelper = {
   map(document) {
-    const { _id, __v, ...documentWithoutId } = document;
+    if (document) {
+      const { _id, __v, ...documentWithoutId } = document;
 
-    return Object.assign({}, documentWithoutId, { id: _id });
+      return Object.assign({}, { id: _id }, documentWithoutId);
+    }
+
+    return null;
+  },
+
+  mapAll(documents) {
+    const mappedDocuments = documents.map((document) => this.map(document));
+
+    return mappedDocuments;
   },
 };

@@ -1,4 +1,5 @@
-// TODO add some way to remove unwanted fields from the return
+import { MongooseHelper } from '../helpers/mongoose-helper.js';
+
 export default class GameRepository {
   constructor(database) {
     this.database = database;
@@ -7,24 +8,24 @@ export default class GameRepository {
   async create(game) {
     const result = await this.database(game).save();
 
-    return result;
+    return MongooseHelper.map(result.toJSON());
   }
 
   async getById(id) {
-    const result = await this.database.findOne({ id });
+    const result = await this.database.findById(id).lean();
 
-    return result;
+    return MongooseHelper.map(result);
   }
 
   async getByTitle(title) {
-    const result = await this.database.findOne({ title });
+    const result = await this.database.findOne({ title }).lean();
 
-    return result;
+    return MongooseHelper.map(result);
   }
 
   async getAll() {
-    const result = await this.database.find();
+    const result = await this.database.find().lean();
 
-    return result[0];
+    return MongooseHelper.mapAll(result);
   }
 }

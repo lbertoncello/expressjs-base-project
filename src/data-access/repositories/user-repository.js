@@ -8,17 +8,17 @@ export default class UserRepository {
   async create(user) {
     const result = await this.database(user).save();
 
-    return MongooseHelper.map(result);
+    return MongooseHelper.map(result.toJSON());
   }
 
   async getById(id) {
-    const result = await this.database.findOne({ id });
+    const result = await this.database.findById(id).lean();
 
     return MongooseHelper.map(result);
   }
 
   async getByEmail(email) {
-    const result = await this.database.findOne({ email });
+    const result = await this.database.findOne({ email }).lean();
 
     return MongooseHelper.map(result);
   }
@@ -30,8 +30,8 @@ export default class UserRepository {
   }
 
   async getAll() {
-    const result = await this.database.find();
+    const result = await this.database.find().lean();
 
-    return result[0];
+    return MongooseHelper.mapAll(result);
   }
 }
