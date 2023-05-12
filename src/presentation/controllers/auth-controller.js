@@ -1,10 +1,10 @@
-import SignUp from '../../use-cases/user/signup.js';
-import SignIn from '../../use-cases/user/signin.js';
+import SignUp from '../../use-cases/auth/signup.js';
+import SignIn from '../../use-cases/auth/signin.js';
 import SuccessResponse from '../responses/success-response.js';
 import InvalidParamError from '../errors/invalid-param-error.js';
 import ClientError from '../errors/client-error.js';
 
-export default class UserController {
+export default class AuthController {
   constructor(repository, encrypter, tokenizer) {
     this.repository = repository;
     this.encrypter = encrypter;
