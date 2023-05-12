@@ -1,6 +1,7 @@
 import AddGame from '../../use-cases/game/add-game.js';
 import SuccessResponse from '../responses/success-response.js';
 import InvalidParamError from '../errors/invalid-param-error.js';
+import GetGameUseCase from '../../use-cases/game/get-game.js';
 import GetAllGamesUseCase from '../../use-cases/game/get-all-games.js';
 
 export default class GameController {
@@ -25,5 +26,17 @@ export default class GameController {
     const games = await getAllGamesUseCase.execute();
 
     return new SuccessResponse(games);
+  }
+
+  async getGameById(req) {
+    const { id } = req.params;
+    if (!id) {
+      throw new InvalidParamError('Id is required');
+    }
+
+    const getGameUseCase = new GetGameUseCase(this.repository);
+    const game = await getGameUseCase.execute(id);
+
+    return new SuccessResponse(game);
   }
 }

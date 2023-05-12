@@ -7,5 +7,6 @@ const controller = makeGameController();
 
 router.route('/').post(adaptRoute(controller.addGame.bind(controller)));
 router.route('/all').get(adaptRoute(controller.getAllGames.bind(controller)));
+router.route('/:id').get(adaptRoute(controller.getGameById.bind(controller)));
 
 export default router;

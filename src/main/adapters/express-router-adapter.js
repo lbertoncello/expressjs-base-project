@@ -3,6 +3,7 @@ export const adaptRoute = (handler) => {
     try {
       const httpRequest = {
         body: req.body,
+        params: req.params,
       };
       const httpResponse = await handler(httpRequest);
 
