@@ -5,6 +5,7 @@ import { makeGameController } from '../factories/game.js';
 const router = express.Router();
 const controller = makeGameController();
 
-router.route('/game').post(adaptRoute(controller.addGame.bind(controller)));
+router.route('/').post(adaptRoute(controller.addGame.bind(controller)));
+router.route('/all').get(adaptRoute(controller.getAllGames.bind(controller)));
 
 export default router;
