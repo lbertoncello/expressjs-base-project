@@ -1,5 +1,3 @@
-// TODO add validation
-// TODO encrypt password
 import User from '../../entities/user.js';
 
 export default class SignUp {

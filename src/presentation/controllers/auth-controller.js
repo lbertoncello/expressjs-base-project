@@ -1,5 +1,6 @@
 import SignUp from '../../use-cases/auth/signup.js';
 import SignIn from '../../use-cases/auth/signin.js';
+import SignOut from '../../use-cases/auth/signout.js';
 import SuccessResponse from '../responses/success-response.js';
 import InvalidParamError from '../errors/invalid-param-error.js';
 import ClientError from '../errors/client-error.js';
@@ -37,6 +38,13 @@ export default class AuthController {
     if (!result) {
       throw new ClientError('Password does not match or the user does not exist', 401);
     }
+
+    return new SuccessResponse(result);
+  }
+
+  async signOut(req) {
+    const signOutUseCase = new SignOut();
+    const result = await signOutUseCase.execute();
 
     return new SuccessResponse(result);
   }
