@@ -1,7 +1,7 @@
-export default class ApplicationError extends Error {
+export default class ClientError extends Error {
   constructor(message, status) {
-    const fullMessage = `Client error: ${message}`;
-    super(fullMessage);
+    super(message);
     this.status = status;
+    this.name = 'ClientError';
   }
 }

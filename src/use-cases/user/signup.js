@@ -11,7 +11,7 @@ export default class SignUp {
   async execute(name, email, password) {
     const dbUser = await this.repository.getByEmail(email);
     if (dbUser) {
-      throw new Error('User already exists');
+      return null;
     }
 
     const encryptedPassword = await this.encrypter.encrypt(password);

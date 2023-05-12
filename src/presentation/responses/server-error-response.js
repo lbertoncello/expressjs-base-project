@@ -1,7 +1,7 @@
 import HttpResponse from './http-response.js';
 
 export default class ServerErrorResponse extends HttpResponse {
-  constructor(message) {
+  constructor() {
     const success = false;
     const data = {};
     const status = 500;

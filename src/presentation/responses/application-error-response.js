@@ -6,6 +6,6 @@ export default class ApplicationErrorResponse extends HttpResponse {
     const data = {};
 
     super(status, success, data);
-    this.body.message = `Application Error: ${message}`;
+    this.body.message = message;
   }
 }

@@ -1,6 +1,6 @@
 import AddGame from '../../use-cases/game/add-game.js';
 import SuccessResponse from '../responses/success-response.js';
-import ServerErrorResponse from '../responses/server-error-response.js';
+import InvalidParamError from '../errors/invalid-param-error.js';
 
 export default class GameController {
   constructor(repository) {
@@ -8,15 +8,14 @@ export default class GameController {
   }
 
   async addGame(req) {
-    try {
-      const addGameUseCase = new AddGame(this.repository);
-      const { title, rating, summary } = req.body;
-      const result = await addGameUseCase.execute(title, rating, summary);
-
-      return new SuccessResponse(result);
-    } catch (err) {
-      console.error(err);
-      return new ServerErrorResponse(err.message);
+    const { title, rating, summary } = req.body;
+    if (!(title && rating && summary)) {
+      throw new InvalidParamError('Not all parameters were informed');
     }
+
+    const addGameUseCase = new AddGame(this.repository);
+    const result = await addGameUseCase.execute(title, rating, summary);
+
+    return new SuccessResponse(result);
   }
 }
