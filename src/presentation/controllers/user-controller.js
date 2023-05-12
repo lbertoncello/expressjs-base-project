@@ -5,9 +5,10 @@ import InvalidParamError from '../errors/invalid-param-error.js';
 import ClientError from '../errors/client-error.js';
 
 export default class UserController {
-  constructor(repository, encrypter) {
+  constructor(repository, encrypter, tokenizer) {
     this.repository = repository;
     this.encrypter = encrypter;
+    this.tokenizer = tokenizer;
   }
 
   async signUp(req) {
@@ -31,7 +32,7 @@ export default class UserController {
       throw new InvalidParamError('Required parameters not informed');
     }
 
-    const signInUseCase = new SignIn(this.repository, this.encrypter);
+    const signInUseCase = new SignIn(this.repository, this.encrypter, this.tokenizer);
     const result = await signInUseCase.execute(email, password);
     if (!result) {
       throw new ClientError('Password does not match or the user does not exist', 401);

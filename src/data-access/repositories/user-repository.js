@@ -1,3 +1,5 @@
+import { MongooseHelper } from '../helpers/mongoose-helper.js';
+
 export default class UserRepository {
   constructor(database) {
     this.database = database;
@@ -6,25 +8,25 @@ export default class UserRepository {
   async create(user) {
     const result = await this.database(user).save();
 
-    return result;
+    return MongooseHelper.map(result);
   }
 
   async getById(id) {
     const result = await this.database.findOne({ id });
 
-    return result;
+    return MongooseHelper.map(result);
   }
 
   async getByEmail(email) {
     const result = await this.database.findOne({ email });
 
-    return result;
+    return MongooseHelper.map(result);
   }
 
   async getByEmailWithPassword(email) {
-    const result = await this.database.findOne({ email }).select('+password');
+    const result = await this.database.findOne({ email }).select('+password').lean();
 
-    return result;
+    return MongooseHelper.map(result);
   }
 
   async getAll() {

@@ -2,6 +2,8 @@ import ApplicationErrorResponse from '../../presentation/responses/application-e
 import ServerErrorResponse from '../../presentation/responses/server-error-response.js';
 
 export default (err, req, res, next) => {
+  console.error(err);
+
   if (err.status && err.status !== 500 && err.message) {
     const message = `${err.name}: ${err.message}`;
 

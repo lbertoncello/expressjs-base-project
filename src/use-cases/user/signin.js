@@ -1,7 +1,10 @@
+import _ from 'lodash';
+
 export default class SignIn {
-  constructor(repository, encrypter) {
+  constructor(repository, encrypter, tokenizer) {
     this.repository = repository;
     this.encrypter = encrypter;
+    this.tokenizer = tokenizer;
   }
 
   async execute(email, password) {
@@ -16,6 +19,9 @@ export default class SignIn {
       return null;
     }
 
-    return { test: 'sucesso' };
+    const userWithoutPassword = _.omit(dbUser, 'password');
+    const token = await this.tokenizer.tokenize(userWithoutPassword);
+
+    return { token };
   }
 }
