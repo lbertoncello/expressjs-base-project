@@ -3,7 +3,10 @@ import SuccessResponse from '../responses/success-response.js';
 import InvalidParamError from '../errors/invalid-param-error.js';
 import GetGameUseCase from '../../use-cases/game/get-game.js';
 import GetAllGamesUseCase from '../../use-cases/game/get-all-games.js';
+import DeleteGameUseCase from '../../use-cases/game/delete-game.js';
+import ClientError from '../errors/client-error.js';
 
+// TODO complete CRUD
 export default class GameController {
   constructor(repository) {
     this.repository = repository;
@@ -38,5 +41,18 @@ export default class GameController {
     const game = await getGameUseCase.execute(id);
 
     return new SuccessResponse(game);
+  }
+
+  async deleteGameById(req) {
+    const { id } = req.body;
+    if (!id) {
+      throw new InvalidParamError('Id is required');
+    }
+
+    const deleteGameUseCase = new DeleteGameUseCase(this.repository);
+    const result = await deleteGameUseCase.execute(id);
+
+    if (!result.deleted) throw new ClientError('It was not possible to delete the specified data', 400);
+    return new SuccessResponse(result);
   }
 }

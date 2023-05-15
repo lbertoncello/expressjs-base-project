@@ -5,6 +5,7 @@ import SuccessResponse from '../responses/success-response.js';
 import InvalidParamError from '../errors/invalid-param-error.js';
 import ClientError from '../errors/client-error.js';
 
+// TODO add user controller to complete the CRUD
 export default class AuthController {
   constructor(repository, encrypter, tokenizer) {
     this.repository = repository;

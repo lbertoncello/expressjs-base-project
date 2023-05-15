@@ -6,7 +6,14 @@ const schema = new mongoose.Schema(
     rating: Number,
     summary: String,
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+    statics: {
+      deleteById(id) {
+        return this.deleteOne({ _id: id });
+      },
+    },
+  }
 );
 
 export default schema;

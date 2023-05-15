@@ -28,4 +28,11 @@ export default class GameRepository {
 
     return MongooseHelper.mapAll(result);
   }
+
+  async deleteById(id) {
+    const result = await this.database.deleteById(id);
+    const deleted = result?.deletedCount > 0;
+
+    return { deleted };
+  }
 }
