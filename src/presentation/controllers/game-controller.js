@@ -7,7 +7,6 @@ import GetAllGamesUseCase from '../../use-cases/game/get-all-games.js';
 import DeleteGameUseCase from '../../use-cases/game/delete-game.js';
 import UpdateGameUseCase from '../../use-cases/game/update-game.js';
 
-// TODO complete CRUD
 export default class GameController {
   constructor(repository) {
     this.repository = repository;
@@ -32,7 +31,6 @@ export default class GameController {
     return new SuccessResponse(games);
   }
 
-  // Return error when there's no game for the requested id
   async getGameById(req) {
     const { id } = req.params;
     if (!id) {
@@ -41,6 +39,8 @@ export default class GameController {
 
     const getGameUseCase = new GetGameUseCase(this.repository);
     const game = await getGameUseCase.execute(id);
+
+    if (!game) throw new ClientError('It was not possible to retrieve the specified record', 400);
 
     return new SuccessResponse(game);
   }
@@ -54,7 +54,7 @@ export default class GameController {
     const deleteGameUseCase = new DeleteGameUseCase(this.repository);
     const result = await deleteGameUseCase.execute(id);
 
-    if (!result.deleted) throw new ClientError('It was not possible to delete the specified data', 400);
+    if (!result.deleted) throw new ClientError('It was not possible to delete the specified record', 400);
     return new SuccessResponse(result);
   }
 
