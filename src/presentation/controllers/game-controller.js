@@ -1,10 +1,11 @@
 import AddGame from '../../use-cases/game/add-game.js';
 import SuccessResponse from '../responses/success-response.js';
 import InvalidParamError from '../errors/invalid-param-error.js';
+import ClientError from '../errors/client-error.js';
 import GetGameUseCase from '../../use-cases/game/get-game.js';
 import GetAllGamesUseCase from '../../use-cases/game/get-all-games.js';
 import DeleteGameUseCase from '../../use-cases/game/delete-game.js';
-import ClientError from '../errors/client-error.js';
+import UpdateGameUseCase from '../../use-cases/game/update-game.js';
 
 // TODO complete CRUD
 export default class GameController {
@@ -31,6 +32,7 @@ export default class GameController {
     return new SuccessResponse(games);
   }
 
+  // Return error when there's no game for the requested id
   async getGameById(req) {
     const { id } = req.params;
     if (!id) {
@@ -44,7 +46,7 @@ export default class GameController {
   }
 
   async deleteGameById(req) {
-    const { id } = req.body;
+    const { id } = req.params;
     if (!id) {
       throw new InvalidParamError('Id is required');
     }
@@ -53,6 +55,23 @@ export default class GameController {
     const result = await deleteGameUseCase.execute(id);
 
     if (!result.deleted) throw new ClientError('It was not possible to delete the specified data', 400);
+    return new SuccessResponse(result);
+  }
+
+  async updateGameById(req) {
+    const { id } = req.params;
+    if (!id) {
+      throw new InvalidParamError('Id is required');
+    }
+
+    const { title, rating, summary } = req.body;
+    if (!(title || rating || summary)) {
+      throw new InvalidParamError('At least one field to update must be provided');
+    }
+
+    const updateGameUseCase = new UpdateGameUseCase(this.repository);
+    const result = await updateGameUseCase.execute(id, { title, rating, summary });
+
     return new SuccessResponse(result);
   }
 }

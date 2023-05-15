@@ -35,4 +35,10 @@ export default class GameRepository {
 
     return { deleted };
   }
+
+  async updateById(id, fields) {
+    const result = await this.database.findByIdAndUpdate(id, fields, { new: true, upsert: false }).lean();
+
+    return MongooseHelper.map(result);
+  }
 }
