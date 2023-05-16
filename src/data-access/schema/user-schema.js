@@ -22,7 +22,14 @@ const schema = new mongoose.Schema(
       select: false,
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+    statics: {
+      deleteById(id) {
+        return this.deleteOne({ _id: id });
+      },
+    },
+  }
 );
 
 export default schema;

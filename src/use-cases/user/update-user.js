@@ -5,7 +5,7 @@ export default class UpdateUser {
     this.repository = repository;
   }
 
-  // It is only allowed to get the signed in user
+  // It is only allowed to update the user signed in
   async execute(loggedUser, fields) {
     const allowedFieldNames = ['name', 'email'];
     const filteredFields = fieldsFilter(allowedFieldNames, fields);

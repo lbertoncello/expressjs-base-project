@@ -40,4 +40,11 @@ export default class UserRepository {
 
     return MongooseHelper.map(result);
   }
+
+  async deleteById(id) {
+    const result = await this.database.deleteById(id);
+    const deleted = result?.deletedCount > 0;
+
+    return { deleted };
+  }
 }
