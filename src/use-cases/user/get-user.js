@@ -3,10 +3,11 @@ export default class GetUser {
     this.repository = repository;
   }
 
+  // It is only allowed to get the signed in user
   async execute(loggedUser) {
     const id = loggedUser.id;
-    const user = await this.repository.getById(id);
+    const result = await this.repository.getById(id);
 
-    return user;
+    return result;
   }
 }

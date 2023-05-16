@@ -5,6 +5,10 @@ import { adaptRoute } from '../adapters/express-router-adapter.js';
 const router = express.Router();
 const controller = makeUserController();
 
-router.route('/me').get(adaptRoute(controller.getMyUserData.bind(controller)));
+router
+  .route('/me')
+  .get(adaptRoute(controller.getMyUserData.bind(controller)))
+  .put(adaptRoute(controller.updateMyUserData.bind(controller)))
+  .patch(adaptRoute(controller.updateMyUserData.bind(controller)));
 
 export default router;
