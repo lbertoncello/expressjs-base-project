@@ -22,6 +22,6 @@ export default class SignIn {
     const userWithoutPassword = _.omit(dbUser, 'password');
     const token = await this.tokenizer.tokenize(userWithoutPassword);
 
-    return { token };
+    return { token, user: userWithoutPassword };
   }
 }
