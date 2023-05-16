@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import User from '../../entities/user.js';
 
 export default class SignUp {
@@ -15,6 +16,11 @@ export default class SignUp {
     const encryptedPassword = await this.encrypter.encrypt(password);
     const user = new User(name, email, encryptedPassword);
 
-    return await this.repository.create(user);
+    const createdDbUser = await this.repository.create(user);
+    if (!createdDbUser) return null;
+
+    // Remove password before returning if needed
+    if (createdDbUser.password) return _.omit(createdDbUser, 'password');
+    return createdDbUser;
   }
 }
