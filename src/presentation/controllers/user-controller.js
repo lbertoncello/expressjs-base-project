@@ -15,6 +15,8 @@ export default class UserController {
     const getUserUseCase = new GetUserUseCase(this.repository);
     const user = await getUserUseCase.execute(loggedUser);
 
+    if (!user) throw new ClientError('It was not possible to retrieve the specified record', 400);
+
     return new SuccessResponse(user);
   }
 
