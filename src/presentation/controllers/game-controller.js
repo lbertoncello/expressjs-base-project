@@ -14,9 +14,7 @@ export default class GameController {
 
   async addGame(req) {
     const { title, rating, summary } = req.body;
-    if (!(title && rating && summary)) {
-      throw new InvalidParamError('Not all parameters were informed');
-    }
+    if (!(title && rating && summary)) throw new InvalidParamError('Not all parameters were informed');
 
     const addGameUseCase = new AddGame(this.repository);
     const result = await addGameUseCase.execute(title, rating, summary);
@@ -33,9 +31,7 @@ export default class GameController {
 
   async getGameById(req) {
     const { id } = req.params;
-    if (!id) {
-      throw new InvalidParamError('Id is required');
-    }
+    if (!id) throw new InvalidParamError("'id' is required");
 
     const getGameUseCase = new GetGameUseCase(this.repository);
     const game = await getGameUseCase.execute(id);
@@ -47,9 +43,7 @@ export default class GameController {
 
   async deleteGameById(req) {
     const { id } = req.params;
-    if (!id) {
-      throw new InvalidParamError('Id is required');
-    }
+    if (!id) throw new InvalidParamError("'id' is required");
 
     const deleteGameUseCase = new DeleteGameUseCase(this.repository);
     const result = await deleteGameUseCase.execute(id);
@@ -60,14 +54,10 @@ export default class GameController {
 
   async updateGameById(req) {
     const { id } = req.params;
-    if (!id) {
-      throw new InvalidParamError('Id is required');
-    }
+    if (!id) throw new InvalidParamError("'id' is required");
 
     const { title, rating, summary } = req.body;
-    if (!(title || rating || summary)) {
-      throw new InvalidParamError('At least one field to update must be provided');
-    }
+    if (!(title || rating || summary)) throw new InvalidParamError('At least one field to update must be provided');
 
     const updateGameUseCase = new UpdateGameUseCase(this.repository);
     const result = await updateGameUseCase.execute(id, { title, rating, summary });

@@ -5,7 +5,6 @@ import SuccessResponse from '../responses/success-response.js';
 import InvalidParamError from '../errors/invalid-param-error.js';
 import ClientError from '../errors/client-error.js';
 
-// TODO add user controller to complete the CRUD
 export default class AuthController {
   constructor(repository, emailValidator, encrypter, tokenizer) {
     this.repository = repository;
@@ -14,7 +13,6 @@ export default class AuthController {
     this.tokenizer = tokenizer;
   }
 
-  // TODO add email validation
   async signUp(req) {
     const { name, email, password } = req.body;
     if (!(name && email && password)) throw new InvalidParamError('Required parameters not informed');
