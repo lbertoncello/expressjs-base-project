@@ -1,7 +1,8 @@
 import { start } from './server.js';
+import logger from './config/logger/logger.js';
 
 start();
 
 process.on('unhandledRejection', (err, _) => {
-  console.log(`SERVER ERROR: ${err}`);
+  logger.error(`SERVER ERROR: ${err}`);
 });

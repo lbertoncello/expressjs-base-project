@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import envConfig from '../config/env/env.js';
+import logger from '../config/logger/logger.js';
 
 export default async (url = envConfig.dbUrl, opts = {}) => {
   try {
@@ -9,7 +10,7 @@ export default async (url = envConfig.dbUrl, opts = {}) => {
 
     return connection;
   } catch (err) {
-    console.error('DB initialization ERROR');
+    logger.error('DB initialization ERROR');
     throw err;
   }
 };

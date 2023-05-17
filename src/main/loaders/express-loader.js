@@ -9,6 +9,7 @@ import ApplicationError from '../../presentation/errors/application-error.js';
 import errorMiddleware from '../middlewares/error-middleware.js';
 import envConfig from '../config/env/env.js';
 import routes from '../routes/routes.js';
+import logger from '../config/logger/logger.js';
 
 const apiLimiter = rateLimit({
   windowMs: 20 * 60 * 1000, // 20 minutes
@@ -54,7 +55,7 @@ export default ({ app, express }) => {
 
     return app;
   } catch (err) {
-    console.error('Express initialization ERROR');
+    logger.error('Express initialization ERROR');
     throw err;
   }
 };
