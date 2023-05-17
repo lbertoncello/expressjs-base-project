@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
-import options from '../config/config.js';
+import envConfig from '../config/env/env.js';
 
-export default async (url = options.dbUrl, opts = {}) => {
+export default async (url = envConfig.dbUrl, opts = {}) => {
   try {
     const dbOptions = { ...opts, useNewUrlParser: true, useUnifiedTopology: true };
     await mongoose.connect(url, dbOptions);

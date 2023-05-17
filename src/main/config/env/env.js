@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import __dirname from '../../utils/dirname.js';
+import __dirname from '../../../utils/dirname.js';
 import dotenv from 'dotenv';
 
 dotenv.config({ path: __dirname + '/.env' });
@@ -18,18 +18,18 @@ let envConfig = null;
 switch (env) {
   case 'dev':
   case 'development':
-    envConfig = (await import('./dev.js')).config;
+    envConfig = (await import('./dev-env.js')).config;
 
     break;
 
   case 'prod':
   case 'production':
-    envConfig = (await import('./prod.js')).config;
+    envConfig = (await import('./prod-env.js')).config;
 
     break;
 
   default:
-    envConfig = (await import('./dev.js')).config;
+    envConfig = (await import('./dev-env.js')).config;
 }
 
 export default _.merge(baseConfig, envConfig);

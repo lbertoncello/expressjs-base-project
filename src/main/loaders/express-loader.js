@@ -7,7 +7,7 @@ import cors from 'cors';
 
 import ApplicationError from '../../presentation/errors/application-error.js';
 import errorMiddleware from '../middlewares/error-middleware.js';
-import config from '../config/config.js';
+import envConfig from '../config/env/env.js';
 import routes from '../routes/routes.js';
 
 const apiLimiter = rateLimit({
@@ -30,7 +30,7 @@ export default ({ app, express }) => {
     app.use(express.urlencoded({ extended: true }));
 
     // Dev logging middleware
-    if (config.isDev) {
+    if (envConfig.isDev) {
       app.use(morgan('dev'));
     }
 
