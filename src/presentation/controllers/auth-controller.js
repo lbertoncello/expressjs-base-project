@@ -7,38 +7,35 @@ import ClientError from '../errors/client-error.js';
 
 // TODO add user controller to complete the CRUD
 export default class AuthController {
-  constructor(repository, encrypter, tokenizer) {
+  constructor(repository, emailValidator, encrypter, tokenizer) {
     this.repository = repository;
+    this.emailValidator = emailValidator;
     this.encrypter = encrypter;
     this.tokenizer = tokenizer;
   }
 
+  // TODO add email validation
   async signUp(req) {
     const { name, email, password } = req.body;
-    if (!(name && email && password)) {
-      throw new InvalidParamError('Required parameters not informed');
-    }
+    if (!(name && email && password)) throw new InvalidParamError('Required parameters not informed');
+
+    const isEmailValid = this.emailValidator.isValid(email);
+    if (!isEmailValid) throw new InvalidParamError("'email' is not valid");
 
     const signUpUseCase = new SignUp(this.repository, this.encrypter);
     const result = await signUpUseCase.execute(name, email, password);
-    if (!result) {
-      throw new ClientError('User already exists', 401);
-    }
+    if (!result) throw new ClientError('User already exists', 401);
 
     return new SuccessResponse(result);
   }
 
   async signIn(req) {
     const { email, password } = req.body;
-    if (!(email && password)) {
-      throw new InvalidParamError('Required parameters not informed');
-    }
+    if (!(email && password)) throw new InvalidParamError('Required parameters not informed');
 
     const signInUseCase = new SignIn(this.repository, this.encrypter, this.tokenizer);
     const result = await signInUseCase.execute(email, password);
-    if (!result) {
-      throw new ClientError('Password does not match or the user does not exist', 401);
-    }
+    if (!result) throw new ClientError('Password does not match or the user does not exist', 401);
 
     return new SuccessResponse(result);
   }
