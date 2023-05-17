@@ -9,9 +9,10 @@ const errorFormat = format.printf((info) => {
   const message = info.message ? info.message : sym ? info[sym] : '';
   const text = info.stack ? `${message}\n${info.stack}` : message;
 
-  return `${info.timestamp} ${info.level.toUpperCase()}: ${text}`;
+  return `[${info.timestamp}] [${info.level.toUpperCase()}] ${text}`;
 });
 
+// TODO add colors to the text
 const consoleTransportOptions = {
   format: format.combine(
     format.timestamp({
