@@ -5,11 +5,11 @@ import envConfig from '../config/env/env.js';
 export default async (req, res, next) => {
   const authHeader = req.headers.authorization;
   const token = authHeader ? authHeader.split(' ')[1] : null;
-  if (!token) next(new AuthRequiredError());
+  if (!token) return next(new AuthRequiredError());
 
   const jwt = new JwtAdapter(envConfig.secrets.jwt, envConfig.secrets.jwtExp);
   const decoded = await jwt.verify(token);
-  if (!decoded) next(new AuthRequiredError('Failed to authenticate'));
+  if (!decoded) return next(new AuthRequiredError('Failed to authenticate'));
 
   req.authUser = decoded;
   next();
