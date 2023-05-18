@@ -2,6 +2,7 @@ module.exports = {
   env: {
     es2021: true,
     node: true,
+    'jest/globals': true,
   },
   extends: ['standard', 'plugin:prettier/recommended'],
   overrides: [],
@@ -9,7 +10,7 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module',
   },
-  plugins: ['prettier'],
+  plugins: ['prettier', 'jest'],
   rules: {
     'prettier/prettier': 'error',
     'arrow-body-style': 'off',

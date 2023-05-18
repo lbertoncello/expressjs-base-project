@@ -9,8 +9,14 @@
   "private": false,
   "type": "module",
   "scripts": {
-    "start": "node src/main/app.js",
-    "dev": "nodemon src/main/app.js",
+    "start": "node src/main/server.js",
+    "dev": "nodemon src/main/server.js",
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --passWithNoTests --silent --noStackTrace --runInBand --detectOpenHandles --forceExit",
+    "test:verbose": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --passWithNoTests --runInBand --detectOpenHandles --forceExit",
+    "test:unit": "cross-env NODE_OPTIONS=--experimental-vm-modules yarn test -- --watch --detectOpenHandles --forceExit -c jest-unit-config.js",
+    "test:integration": "cross-env NODE_OPTIONS=--experimental-vm-modules yarn test -- --watch --detectOpenHandles --forceExit -c jest-integration-config.js",
+    "test:staged": "cross-env NODE_OPTIONS=--experimental-vm-modules yarn test -- --findRelatedTests --detectOpenHandles --forceExit",
+    "test:ci": "cross-env NODE_OPTIONS=--experimental-vm-modules yarn test -- --coverage --detectOpenHandles --forceExit",
     "lint": "eslint . --ext .js,.jsx,.cjs,.mjs --fix",
     "format": "prettier --write src/",
     "prepare": "husky install"
@@ -36,18 +42,22 @@
   },
   "devDependencies": {
     "@eslint/create-config": "^0.4.3",
+    "cross-env": "^7.0.3",
     "eslint": "^8.0.1",
     "eslint-config-prettier": "^8.8.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-jest": "^27.2.1",
     "eslint-plugin-n": "^15.0.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-promise": "^6.0.0",
     "git-commit-msg-linter": "^5.0.4",
     "husky": "^8.0.3",
+    "jest": "^29.5.0",
     "lint-staged": "^13.2.2",
     "markdown-notes-tree": "^1.12.0",
     "nodemon": "^2.0.22",
-    "prettier": "^2.8.8"
+    "prettier": "^2.8.8",
+    "supertest": "^6.3.3"
   }
 }
