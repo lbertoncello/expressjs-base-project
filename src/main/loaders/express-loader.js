@@ -1,57 +1,15 @@
-import morgan from 'morgan';
-import mongoSanitize from 'express-mongo-sanitize';
-import rateLimit from 'express-rate-limit';
-import helmet from 'helmet';
-import xss from 'xss-clean';
-import cors from 'cors';
-
-import ApplicationError from '../../presentation/errors/application-error.js';
-import errorMiddleware from '../middlewares/error-middleware.js';
-import envConfig from '../config/env/env.js';
-import routes from '../routes/routes.js';
+import setupMiddleware from '../config/setup-middlewares.js';
+import setupRoutes from '../config/setup-routes.js';
 import logger from '../config/logger/logger.js';
-
-const apiLimiter = rateLimit({
-  windowMs: 20 * 60 * 1000, // 20 minutes
-  max: 100, // Limit each IP to 100 requests per `window` (here, per 20 minutes)
-  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-  handler: (request, res, next) =>
-    res.status(429).json({
-      status: false,
-      message: 'Too many requests, please try again later.',
-    }),
-});
 
 export default ({ app, express }) => {
   try {
     app.disable('x-powered-by');
-
-    app.use(express.json());
-    app.use(express.urlencoded({ extended: true }));
-
-    // Dev logging middleware
-    if (envConfig.isDev) {
-      app.use(morgan('dev'));
-    }
-
     // Add middlwares to improve security
     app.enable('trust proxy');
 
-    app.use(cors());
-    app.use(mongoSanitize());
-    // Add security headers
-    app.use(helmet());
-    app.use(xss());
-
-    app.get('/test', (req, res) => res.json({ test: 'It is working!' }));
-    app.use('/api/v1', apiLimiter, routes);
-
-    // Error 404 handler
-    app.use((req, res, next) => next(new ApplicationError('Route not found', 404)));
-
-    // Error handler
-    app.use(errorMiddleware);
+    setupMiddleware(app);
+    setupRoutes(app);
 
     return app;
   } catch (err) {
