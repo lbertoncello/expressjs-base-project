@@ -1,8 +1,7 @@
-import { start } from './server.js';
-import logger from './config/logger/logger.js';
+import express from 'express';
+import expressLoader from './loaders/express-loader.js';
 
-start();
+const app = express();
+expressLoader(app);
 
-process.on('unhandledRejection', (err, _) => {
-  logger.error(`SERVER ERROR: ${err}`);
-});
+export default app;

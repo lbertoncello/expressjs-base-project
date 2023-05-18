@@ -1,19 +1,24 @@
-import express from 'express';
-import loaders from './loaders/loaders.js';
-import envConfig from './config/env/env.js';
+import app from './app.js';
+import dbLoader from './loaders/db-loader.js';
 import logger from './config/logger/logger.js';
+import envConfig from './config/env/env.js';
 
-export const app = express();
-
-export const start = async () => {
+const start = async () => {
   try {
-    await loaders({ app, express });
+    await dbLoader();
+
     app.listen(envConfig.port, () => {
+      logger.info('The server has been initialized...');
       logger.info(`API running on http://localhost:${envConfig.port}/api/v1`);
       logger.info(envConfig.dbUrl);
     });
   } catch (err) {
-    logger.error(err);
-    logger.info('It was not possible to initialize the server');
+    logger.error('It was not possible to initialize the server', err);
   }
 };
+
+start();
+
+process.on('unhandledRejection', (err, _) => {
+  logger.error(`SERVER ERROR`, err);
+});

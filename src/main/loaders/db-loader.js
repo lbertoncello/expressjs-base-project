@@ -8,9 +8,11 @@ export default async (url = envConfig.dbUrl, opts = {}) => {
     await mongoose.connect(url, dbOptions);
     const connection = mongoose.connection;
 
+    logger.info('MongoDB has been initialized...');
+
     return connection;
   } catch (err) {
-    logger.error('DB initialization ERROR');
+    logger.error('DB initialization ERROR', err);
     throw err;
   }
 };
