@@ -1,5 +1,9 @@
 import request from 'supertest';
-import app from '../../../src/main/app.js';
+import express from 'express';
+import setupMiddlewares from '../../../src/main/config/setup-middlewares';
+
+const app = express();
+setupMiddlewares(app);
 
 describe('Cors Middleware', () => {
   test('Should enable cors', async () => {
