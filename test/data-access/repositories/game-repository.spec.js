@@ -24,7 +24,7 @@ describe('Game Mongo Repository', () => {
     return new GameRepository(gameCollection);
   };
 
-  test('Should return a game on success', async () => {
+  test('Should create a game on success', async () => {
     const sut = makeSut();
     const game = await sut.create({
       title: 'Game test title',
@@ -37,6 +37,22 @@ describe('Game Mongo Repository', () => {
     expect(game.title).toBe('Game test title');
     expect(game.rating).toBe(4.2);
     expect(game.summary).toBe('Game test summary');
+  });
+
+  test('Should get a game by id on success', async () => {
+    const sut = makeSut();
+    const game = await sut.create({
+      title: 'Game test title',
+      rating: 4.2,
+      summary: 'Game test summary',
+    });
+    const gameGot = await sut.getById(game.id);
+
+    expect(gameGot).toBeTruthy();
+    expect(gameGot.id).toBeTruthy();
+    expect(gameGot.title).toBe('Game test title');
+    expect(gameGot.rating).toBe(4.2);
+    expect(gameGot.summary).toBe('Game test summary');
   });
 
   test('Should update a game on success', async () => {
