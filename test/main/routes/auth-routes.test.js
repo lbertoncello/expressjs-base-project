@@ -21,13 +21,18 @@ describe('Auth Routes', () => {
   });
 
   test('Should return an account on Sign Up on success', async () => {
-    await request(app)
+    const res = await request(app)
       .post('/api/v1/auth/signup')
       .send({
         name: 'Lucas',
         email: 'lucas@mail.com',
         password: '123',
+        passwordConfirmation: '123',
       })
       .expect(200);
+    const user = res.body.data;
+
+    expect(user.name).toBe('Lucas');
+    expect(user.email).toBe('lucas@mail.com');
   });
 });
