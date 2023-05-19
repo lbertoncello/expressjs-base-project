@@ -53,4 +53,21 @@ describe('User Routes', () => {
     expect(userSignedIn.name).toBe('Lucas');
     expect(userSignedIn.email).toBe('lucas@mail.com');
   });
+
+  test('Should update and return the user signed in on success', async () => {
+    const { token, user } = await signInUser();
+    const res = await request(app)
+      .put('/api/v1/user/me')
+      .send({
+        name: 'Updated Lucas',
+        email: 'updatedlucas@mail.com',
+      })
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200);
+    const userSignedIn = res.body.data;
+
+    expect(userSignedIn.id).toBe(user.id);
+    expect(userSignedIn.name).toBe('Updated Lucas');
+    expect(userSignedIn.email).toBe('updatedlucas@mail.com');
+  });
 });

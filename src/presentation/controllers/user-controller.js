@@ -10,6 +10,7 @@ export default class UserController {
     this.repository = repository;
   }
 
+  // TODO add update password route
   async getMyUserData(req) {
     const loggedUser = req.authUser;
     const getUserUseCase = new GetUserUseCase(this.repository);
