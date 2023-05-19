@@ -139,4 +139,26 @@ describe('Game Routes', () => {
     expect(requestedGame.rating).toBe(4.3);
     expect(requestedGame.summary).toBe('Updated Game test summary');
   });
+
+  test('Should delete a game with the specified id', async () => {
+    const insertGameRes = await request(app)
+      .post('/api/v1/game')
+      .send({
+        title: 'Game test title',
+        rating: 4.2,
+        summary: 'Game test summary',
+      })
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200);
+    const insertedGame = insertGameRes.body.data;
+
+    const res = await request(app)
+      .delete(`/api/v1/game/${insertedGame.id}`)
+      .send()
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200);
+    const deleted = res.body.data.deleted;
+
+    expect(deleted).toBeTruthy();
+  });
 });
