@@ -8,7 +8,8 @@ describe('Auth Routes', () => {
   let database = null;
 
   beforeAll(async () => {
-    connection = await dbLoader();
+    // Get mongodb memory server url from env
+    connection = await dbLoader(process.env.MONGO_URL);
     database = new UserDatabase();
   });
 

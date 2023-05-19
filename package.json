@@ -42,6 +42,7 @@
   },
   "devDependencies": {
     "@eslint/create-config": "^0.4.3",
+    "@shelf/jest-mongodb": "^4.1.7",
     "cross-env": "^7.0.3",
     "eslint": "^8.0.1",
     "eslint-config-prettier": "^8.8.0",
