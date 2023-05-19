@@ -59,4 +59,30 @@ describe('Game Routes', () => {
     expect(game.rating).toBe(4.2);
     expect(game.summary).toBe('Game test summary');
   });
+
+  test('Should return all games on success', async () => {
+    await request(app)
+      .post('/api/v1/game')
+      .send({
+        title: 'Game test title 1',
+        rating: 4.1,
+        summary: 'Game test summary 1',
+      })
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200);
+    await request(app)
+      .post('/api/v1/game')
+      .send({
+        title: 'Game test title 2',
+        rating: 4.2,
+        summary: 'Game test summary 2',
+      })
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200);
+
+    const res = await request(app).get('/api/v1/game/all').send().set('Authorization', `Bearer ${token}`).expect(200);
+    const games = res.body.data;
+
+    expect(games.length).toBe(2);
+  });
 });
