@@ -55,6 +55,22 @@ describe('Game Mongo Repository', () => {
     expect(gameGot.summary).toBe('Game test summary');
   });
 
+  test('Should get a game by title on success', async () => {
+    const sut = makeSut();
+    await sut.create({
+      title: 'Game test title',
+      rating: 4.2,
+      summary: 'Game test summary',
+    });
+    const gameGot = await sut.getByTitle('Game test title');
+
+    expect(gameGot).toBeTruthy();
+    expect(gameGot.id).toBeTruthy();
+    expect(gameGot.title).toBe('Game test title');
+    expect(gameGot.rating).toBe(4.2);
+    expect(gameGot.summary).toBe('Game test summary');
+  });
+
   test('Should update a game on success', async () => {
     const sut = makeSut();
     const game = await sut.create({
