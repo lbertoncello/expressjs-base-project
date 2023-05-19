@@ -8,6 +8,7 @@ const controller = makeAuthController();
 
 router.route('/signup').post(adaptRoute(controller.signUp.bind(controller)));
 router.route('/signin').post(adaptRoute(controller.signIn.bind(controller)));
+router.route('/password').post(requireAuth, adaptRoute(controller.changePassword.bind(controller)));
 router.route('/signout').post(requireAuth, adaptRoute(controller.signOut.bind(controller)));
 
 export default router;
