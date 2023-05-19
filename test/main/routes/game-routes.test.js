@@ -85,4 +85,29 @@ describe('Game Routes', () => {
 
     expect(games.length).toBe(2);
   });
+
+  test('Should return a game with the specified id', async () => {
+    const insertGameRes = await request(app)
+      .post('/api/v1/game')
+      .send({
+        title: 'Game test title',
+        rating: 4.2,
+        summary: 'Game test summary',
+      })
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200);
+    const insertedGame = insertGameRes.body.data;
+
+    const res = await request(app)
+      .get(`/api/v1/game/${insertedGame.id}`)
+      .send()
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200);
+    const requestedGame = res.body.data;
+
+    expect(requestedGame.id).toBe(insertedGame.id);
+    expect(requestedGame.title).toBe('Game test title');
+    expect(requestedGame.rating).toBe(4.2);
+    expect(requestedGame.summary).toBe('Game test summary');
+  });
 });
