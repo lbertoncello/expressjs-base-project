@@ -101,6 +101,21 @@ describe('Game Mongo Repository', () => {
     expect(gamesGot[1].summary).toBe('Game test summary 2');
   });
 
+  test('Should delete a game by id on success', async () => {
+    const sut = makeSut();
+    const game = await sut.create({
+      title: 'Game test title',
+      rating: 4.2,
+      summary: 'Game test summary',
+    });
+    const res = await sut.deleteById(game.id);
+    const gameGot = await sut.getById(game.id);
+
+    expect(gameGot).toBeFalsy();
+    expect(res).toBeTruthy();
+    expect(res.deleted).toBeTruthy();
+  });
+
   test('Should update a game on success', async () => {
     const sut = makeSut();
     const game = await sut.create({
