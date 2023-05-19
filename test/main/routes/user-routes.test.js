@@ -70,4 +70,12 @@ describe('User Routes', () => {
     expect(userSignedIn.name).toBe('Updated Lucas');
     expect(userSignedIn.email).toBe('updatedlucas@mail.com');
   });
+
+  test('Should delete the user signed in on success', async () => {
+    const { token } = await signInUser();
+    const res = await request(app).delete('/api/v1/user/me').send().set('Authorization', `Bearer ${token}`).expect(200);
+    const deleted = res.body.data.deleted;
+
+    expect(deleted).toBeTruthy();
+  });
 });
