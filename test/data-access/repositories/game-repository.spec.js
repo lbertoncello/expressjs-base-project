@@ -38,4 +38,24 @@ describe('Game Mongo Repository', () => {
     expect(game.rating).toBe(4.2);
     expect(game.summary).toBe('Game test summary');
   });
+
+  test('Should update a game on success', async () => {
+    const sut = makeSut();
+    const game = await sut.create({
+      title: 'Game test title',
+      rating: 4.2,
+      summary: 'Game test summary',
+    });
+    const updatedGame = await sut.updateById(game.id, {
+      title: 'Updated game title',
+      rating: 4.3,
+      summary: 'Updated game summary',
+    });
+
+    expect(updatedGame).toBeTruthy();
+    expect(updatedGame.id).toBeTruthy();
+    expect(updatedGame.title).toBe('Updated game title');
+    expect(updatedGame.rating).toBe(4.3);
+    expect(updatedGame.summary).toBe('Updated game summary');
+  });
 });
