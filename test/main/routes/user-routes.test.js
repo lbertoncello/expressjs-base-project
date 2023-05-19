@@ -60,7 +60,6 @@ describe('User Routes', () => {
       .put('/api/v1/user/me')
       .send({
         name: 'Updated Lucas',
-        email: 'updatedlucas@mail.com',
       })
       .set('Authorization', `Bearer ${token}`)
       .expect(200);
@@ -68,7 +67,6 @@ describe('User Routes', () => {
 
     expect(userSignedIn.id).toBe(user.id);
     expect(userSignedIn.name).toBe('Updated Lucas');
-    expect(userSignedIn.email).toBe('updatedlucas@mail.com');
   });
 
   test('Should delete the user signed in on success', async () => {

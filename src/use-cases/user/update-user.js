@@ -7,7 +7,7 @@ export default class UpdateUser {
 
   // It is only allowed to update the user signed in
   async execute(loggedUser, fields) {
-    const allowedFieldNames = ['name', 'email'];
+    const allowedFieldNames = ['name'];
     const filteredFields = fieldsFilter(allowedFieldNames, fields);
     const id = loggedUser.id;
     const result = await this.repository.updateById(id, filteredFields);

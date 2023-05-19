@@ -22,12 +22,12 @@ export default class UserController {
   }
 
   async updateMyUserData(req) {
-    const { name, email } = req.body;
-    if (!(name || email)) throw new InvalidParamError('At least one field to update must be provided');
+    const { name } = req.body;
+    if (!name) throw new InvalidParamError('At least one field to update must be provided');
 
     const loggedUser = req.authUser;
     const updateUserUseCase = new UpdateUserUseCase(this.repository);
-    const updatedUser = await updateUserUseCase.execute(loggedUser, { name, email });
+    const updatedUser = await updateUserUseCase.execute(loggedUser, { name });
 
     return new SuccessResponse(updatedUser);
   }
