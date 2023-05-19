@@ -8,7 +8,8 @@ export default class SignIn {
   }
 
   async execute(email, password) {
-    const dbUser = await this.repository.getByEmailWithPassword(email);
+    const normalizedEmail = email.toLowerCase();
+    const dbUser = await this.repository.getByEmailWithPassword(normalizedEmail);
 
     if (!dbUser) {
       return null;

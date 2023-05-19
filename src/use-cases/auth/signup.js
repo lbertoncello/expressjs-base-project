@@ -8,13 +8,14 @@ export default class SignUp {
   }
 
   async execute(name, email, password) {
-    const dbUser = await this.repository.getByEmail(email);
+    const normalizedEmail = email.toLowerCase();
+    const dbUser = await this.repository.getByEmail(normalizedEmail);
     if (dbUser) {
       return null;
     }
 
     const encryptedPassword = await this.encrypter.encrypt(password);
-    const user = new User(name, email, encryptedPassword);
+    const user = new User(name, normalizedEmail, encryptedPassword);
 
     const createdDbUser = await this.repository.create(user);
     if (!createdDbUser) return null;
