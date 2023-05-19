@@ -12,9 +12,9 @@ export default class UserController {
 
   // TODO add update password route
   async getMyUserData(req) {
-    const loggedUser = req.authUser;
+    const signedUser = req.authUser;
     const getUserUseCase = new GetUserUseCase(this.repository);
-    const user = await getUserUseCase.execute(loggedUser);
+    const user = await getUserUseCase.execute(signedUser);
 
     if (!user) throw new ClientError('It was not possible to retrieve the specified record', 400);
 
@@ -25,17 +25,17 @@ export default class UserController {
     const { name } = req.body;
     if (!name) throw new InvalidParamError('At least one field to update must be provided');
 
-    const loggedUser = req.authUser;
+    const signedUser = req.authUser;
     const updateUserUseCase = new UpdateUserUseCase(this.repository);
-    const updatedUser = await updateUserUseCase.execute(loggedUser, { name });
+    const updatedUser = await updateUserUseCase.execute(signedUser, { name });
 
     return new SuccessResponse(updatedUser);
   }
 
   async deleteMyUser(req) {
-    const loggedUser = req.authUser;
+    const signedUser = req.authUser;
     const deleteUserUseCase = new DeleteUserUseCase(this.repository);
-    const result = await deleteUserUseCase.execute(loggedUser);
+    const result = await deleteUserUseCase.execute(signedUser);
 
     if (!result.deleted) throw new ClientError('It was not possible to delete the specified record', 400);
     return new SuccessResponse(result);

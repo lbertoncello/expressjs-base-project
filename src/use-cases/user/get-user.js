@@ -4,8 +4,8 @@ export default class GetUser {
   }
 
   // It is only allowed to get the user signed in
-  async execute(loggedUser) {
-    const id = loggedUser.id;
+  async execute(signedUser) {
+    const id = signedUser.id;
     const result = await this.repository.getById(id);
 
     return result;

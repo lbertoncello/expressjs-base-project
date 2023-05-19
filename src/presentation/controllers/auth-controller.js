@@ -67,9 +67,9 @@ export default class AuthController {
     if (password !== passwordConfirmation)
       throw new InvalidParamError('The password does not match the password confirmation');
 
-    const loggedUser = req.authUser;
+    const signedUser = req.authUser;
     const changePasswordUseCase = new ChangePassword(this.repository, this.encrypter);
-    const result = await changePasswordUseCase.execute(loggedUser, password, oldPassword);
+    const result = await changePasswordUseCase.execute(signedUser, password, oldPassword);
 
     if (!result.previousPasswordMatch)
       throw new InvalidParamError('The previous password does not match the password provided');
