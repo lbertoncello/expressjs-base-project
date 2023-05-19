@@ -1,6 +1,7 @@
 import AddGame from '../../use-cases/game/add-game.js';
 import SuccessResponse from '../responses/success-response.js';
 import InvalidParamError from '../errors/invalid-param-error.js';
+import MissingParamError from '../errors/missing-param-error.js';
 import ClientError from '../errors/client-error.js';
 import GetGameUseCase from '../../use-cases/game/get-game.js';
 import GetAllGamesUseCase from '../../use-cases/game/get-all-games.js';
@@ -13,9 +14,14 @@ export default class GameController {
   }
 
   async addGame(req) {
-    const { title, rating, summary } = req.body;
-    if (!(title && rating && summary)) throw new InvalidParamError('Not all parameters were informed');
+    const requiredFielsd = ['title', 'rating', 'summary'];
+    for (const requiredField of requiredFielsd) {
+      if (!req.body[requiredField]) {
+        throw new MissingParamError(requiredField);
+      }
+    }
 
+    const { title, rating, summary } = req.body;
     const addGameUseCase = new AddGame(this.repository);
     const result = await addGameUseCase.execute(title, rating, summary);
 
@@ -31,7 +37,7 @@ export default class GameController {
 
   async getGameById(req) {
     const { id } = req.params;
-    if (!id) throw new InvalidParamError("'id' is required");
+    if (!id) throw new MissingParamError('id');
 
     const getGameUseCase = new GetGameUseCase(this.repository);
     const game = await getGameUseCase.execute(id);
@@ -43,7 +49,7 @@ export default class GameController {
 
   async deleteGameById(req) {
     const { id } = req.params;
-    if (!id) throw new InvalidParamError("'id' is required");
+    if (!id) throw new MissingParamError('id');
 
     const deleteGameUseCase = new DeleteGameUseCase(this.repository);
     const result = await deleteGameUseCase.execute(id);
@@ -54,7 +60,7 @@ export default class GameController {
 
   async updateGameById(req) {
     const { id } = req.params;
-    if (!id) throw new InvalidParamError("'id' is required");
+    if (!id) throw new MissingParamError('id');
 
     const { title, rating, summary } = req.body;
     if (!(title || rating || summary)) throw new InvalidParamError('At least one field to update must be provided');

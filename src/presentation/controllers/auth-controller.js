@@ -3,6 +3,7 @@ import SignIn from '../../use-cases/auth/signin.js';
 import SignOut from '../../use-cases/auth/signout.js';
 import SuccessResponse from '../responses/success-response.js';
 import InvalidParamError from '../errors/invalid-param-error.js';
+import MissingParamError from '../errors/missing-param-error.js';
 import ClientError from '../errors/client-error.js';
 
 export default class AuthController {
@@ -14,11 +15,14 @@ export default class AuthController {
   }
 
   async signUp(req) {
-    // TODO send back invalid parameter name on error
-    const { name, email, password, passwordConfirmation } = req.body;
-    if (!(name && email && password && passwordConfirmation))
-      throw new InvalidParamError('Required parameters not informed');
+    const requiredFields = ['name', 'email', 'password', 'passwordConfirmation'];
+    for (const requiredField of requiredFields) {
+      if (!req.body[requiredField]) {
+        throw new MissingParamError(requiredField);
+      }
+    }
 
+    const { name, email, password, passwordConfirmation } = req.body;
     if (password !== passwordConfirmation)
       throw new InvalidParamError('The password does not match the password confirmation');
 
@@ -33,9 +37,14 @@ export default class AuthController {
   }
 
   async signIn(req) {
-    const { email, password } = req.body;
-    if (!(email && password)) throw new InvalidParamError('Required parameters not informed');
+    const requiredFields = ['email', 'password'];
+    for (const requiredField of requiredFields) {
+      if (!req.body[requiredField]) {
+        throw new MissingParamError(requiredField);
+      }
+    }
 
+    const { email, password } = req.body;
     const signInUseCase = new SignIn(this.repository, this.encrypter, this.tokenizer);
     const result = await signInUseCase.execute(email, password);
     if (!result) throw new ClientError('Password does not match or the user does not exist', 401);
