@@ -3,7 +3,7 @@ export const MongooseHelper = {
     if (document) {
       const { _id, __v, ...documentWithoutId } = document;
 
-      return Object.assign({}, { id: _id }, documentWithoutId);
+      return Object.assign({}, { id: _id.toString() }, documentWithoutId);
     }
 
     return null;
