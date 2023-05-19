@@ -50,6 +50,7 @@ describe('Game Mongo Repository', () => {
 
     expect(gameGot).toBeTruthy();
     expect(gameGot.id).toBeTruthy();
+    expect(gameGot.id).toBe(game.id);
     expect(gameGot.title).toBe('Game test title');
     expect(gameGot.rating).toBe(4.2);
     expect(gameGot.summary).toBe('Game test summary');
@@ -57,7 +58,7 @@ describe('Game Mongo Repository', () => {
 
   test('Should get a game by title on success', async () => {
     const sut = makeSut();
-    await sut.create({
+    const game = await sut.create({
       title: 'Game test title',
       rating: 4.2,
       summary: 'Game test summary',
@@ -66,9 +67,38 @@ describe('Game Mongo Repository', () => {
 
     expect(gameGot).toBeTruthy();
     expect(gameGot.id).toBeTruthy();
+    expect(gameGot.id).toBe(game.id);
     expect(gameGot.title).toBe('Game test title');
     expect(gameGot.rating).toBe(4.2);
     expect(gameGot.summary).toBe('Game test summary');
+  });
+
+  test('Should get all games on success', async () => {
+    const sut = makeSut();
+    const game1 = await sut.create({
+      title: 'Game test title 1',
+      rating: 4.1,
+      summary: 'Game test summary 1',
+    });
+    const game2 = await sut.create({
+      title: 'Game test title 2',
+      rating: 4.2,
+      summary: 'Game test summary 2',
+    });
+    const gamesGot = await sut.getAll();
+
+    expect(gamesGot[0]).toBeTruthy();
+    expect(gamesGot[0].id).toBeTruthy();
+    expect(gamesGot[0].id).toBe(game1.id);
+    expect(gamesGot[0].title).toBe('Game test title 1');
+    expect(gamesGot[0].rating).toBe(4.1);
+    expect(gamesGot[0].summary).toBe('Game test summary 1');
+    expect(gamesGot[1]).toBeTruthy();
+    expect(gamesGot[1].id).toBeTruthy();
+    expect(gamesGot[1].id).toBe(game2.id);
+    expect(gamesGot[1].title).toBe('Game test title 2');
+    expect(gamesGot[1].rating).toBe(4.2);
+    expect(gamesGot[1].summary).toBe('Game test summary 2');
   });
 
   test('Should update a game on success', async () => {
