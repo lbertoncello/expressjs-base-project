@@ -14,8 +14,13 @@ export default class AuthController {
   }
 
   async signUp(req) {
-    const { name, email, password } = req.body;
-    if (!(name && email && password)) throw new InvalidParamError('Required parameters not informed');
+    // TODO send back invalid parameter name on error
+    const { name, email, password, passwordConfirmation } = req.body;
+    if (!(name && email && password && passwordConfirmation))
+      throw new InvalidParamError('Required parameters not informed');
+
+    if (password !== passwordConfirmation)
+      throw new InvalidParamError('The password does not match the password confirmation');
 
     const isEmailValid = this.emailValidator.isValid(email);
     if (!isEmailValid) throw new InvalidParamError("'email' is not valid");
