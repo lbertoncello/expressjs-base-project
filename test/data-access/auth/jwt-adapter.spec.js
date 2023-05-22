@@ -40,4 +40,13 @@ describe('JWT Adapter', () => {
 
     expect(promise).rejects.toThrow();
   });
+
+  test('Should call JWT verify with the correct values', async () => {
+    const sut = makeSut();
+    const signSpy = jest.spyOn(jwt, 'verify');
+    const token = 'any_token';
+    await sut.verify(token, secret);
+
+    expect(signSpy).toHaveBeenCalledWith(token, secret);
+  });
 });
