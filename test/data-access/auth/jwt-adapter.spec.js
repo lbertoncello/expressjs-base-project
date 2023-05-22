@@ -45,7 +45,7 @@ describe('JWT Adapter', () => {
     const sut = makeSut();
     const verifySpy = jest.spyOn(jwt, 'verify');
     const token = 'any_token';
-    await sut.verify(token, secret);
+    await sut.verify(token);
 
     expect(verifySpy).toHaveBeenCalledWith(token, secret);
   });
@@ -61,5 +61,15 @@ describe('JWT Adapter', () => {
     const decodedToken = await sut.verify(token, secret);
 
     expect(decodedToken).toEqual(rawData);
+  });
+
+  test('Should return null if jwt adapter throws on verify', async () => {
+    const sut = makeSut();
+    jest.spyOn(jwt, 'verify').mockImplementationOnce(() => {
+      throw new Error();
+    });
+    const result = await sut.verify('any_token');
+
+    expect(result).toBeFalsy();
   });
 });
