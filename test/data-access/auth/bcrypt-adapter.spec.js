@@ -46,4 +46,12 @@ describe('Bcrypt Adapter', () => {
 
     await expect(promise).rejects.toThrow();
   });
+
+  test('Should call bcrypt compare with correct values', async () => {
+    const sut = makeSut();
+    const compareSpy = jest.spyOn(bcrypt, 'compare');
+    await sut.compare('any_value', 'any_encrypted_value');
+
+    expect(compareSpy).toHaveBeenCalledWith('any_value', 'any_encrypted_value');
+  });
 });
