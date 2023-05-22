@@ -20,14 +20,24 @@ describe('JWT Adapter', () => {
     expect(signSpy).toHaveBeenCalledWith({ value }, secret, { expiresIn: expire });
   });
 
-  test('Should return a token on success', async () => {
+  test('Should return a token sign on success', async () => {
     const sut = makeSut();
     const token =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2YWx1ZSI6ImFueV92YWx1ZSJ9.lz5pVAHfZ0mj2YgGTWkmHfVIUliIlHxGRx9_Fo5tkVE';
     jest.spyOn(jwt, 'sign').mockResolvedValueOnce(token);
-    const value = 'value';
+    const value = 'any_value';
     const result = await sut.tokenize({ value });
 
     expect(result).toBe(token);
+  });
+
+  test('Should throw if jwt adapter throws on tokenize', async () => {
+    const sut = makeSut();
+    jest.spyOn(jwt, 'sign').mockImplementationOnce(() => {
+      throw new Error();
+    });
+    const promise = sut.tokenize({ value: 'any_value' });
+
+    expect(promise).rejects.toThrow();
   });
 });
