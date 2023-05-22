@@ -43,10 +43,23 @@ describe('JWT Adapter', () => {
 
   test('Should call JWT verify with the correct values', async () => {
     const sut = makeSut();
-    const signSpy = jest.spyOn(jwt, 'verify');
+    const verifySpy = jest.spyOn(jwt, 'verify');
     const token = 'any_token';
     await sut.verify(token, secret);
 
-    expect(signSpy).toHaveBeenCalledWith(token, secret);
+    expect(verifySpy).toHaveBeenCalledWith(token, secret);
+  });
+
+  test('Should return a decoded token on verify on success', async () => {
+    const sut = makeSut();
+    const rawData = { value: 'any_value' };
+    jest.spyOn(jwt, 'verify').mockImplementationOnce(async () => {
+      return new Promise((resolve) => resolve(rawData));
+    });
+    const token =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2YWx1ZSI6ImFueV92YWx1ZSJ9.lz5pVAHfZ0mj2YgGTWkmHfVIUliIlHxGRx9_Fo5tkVE';
+    const decodedToken = await sut.verify(token, secret);
+
+    expect(decodedToken).toEqual(rawData);
   });
 });
