@@ -19,4 +19,15 @@ describe('JWT Adapter', () => {
 
     expect(signSpy).toHaveBeenCalledWith({ value }, secret, { expiresIn: expire });
   });
+
+  test('Should return a token on success', async () => {
+    const sut = makeSut();
+    const token =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
+    jest.spyOn(jwt, 'sign').mockResolvedValueOnce(token);
+    const value = 'value';
+    const result = await sut.tokenize({ value });
+
+    expect(result).toBe(token);
+  });
 });
