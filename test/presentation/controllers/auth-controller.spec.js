@@ -1,3 +1,4 @@
+import { jest } from '@jest/globals';
 import AuthController from '../../../src/presentation/controllers/auth-controller';
 import MissingParamError from '../../../src/presentation/errors/missing-param-error';
 import InvalidParamError from '../../../src/presentation/errors/invalid-param-error';
@@ -73,8 +74,17 @@ const makeFakeUser = () => ({
   password: 'valid_password',
 });
 
+const makeFakeRequest = () => ({
+  body: {
+    name: 'any_name',
+    email: 'any_email@mail.com',
+    password: 'any_password',
+    passwordConfirmation: 'any_password',
+  },
+});
+
 describe('Auth Controller', () => {
-  test('Should return 400 on sign up if no name is provided', async () => {
+  test('Should return an error on sign up if no name is provided', async () => {
     const { sut } = makeSut();
     const httpRequest = {
       body: {
@@ -88,7 +98,7 @@ describe('Auth Controller', () => {
     expect(promise).rejects.toEqual(new MissingParamError('name'));
   });
 
-  test('Should return 400 on sign up if no email is provided', async () => {
+  test('Should return an error on sign up if no email is provided', async () => {
     const { sut } = makeSut();
     const httpRequest = {
       body: {
@@ -102,7 +112,7 @@ describe('Auth Controller', () => {
     expect(promise).rejects.toEqual(new MissingParamError('email'));
   });
 
-  test('Should return 400 on sign up if no password is provided', async () => {
+  test('Should return an error on sign up if no password is provided', async () => {
     const { sut } = makeSut();
     const httpRequest = {
       body: {
@@ -116,7 +126,7 @@ describe('Auth Controller', () => {
     expect(promise).rejects.toEqual(new MissingParamError('password'));
   });
 
-  test('Should return 400 on sign up if no passwordConfirmation is provided', async () => {
+  test('Should return an error on sign up if no passwordConfirmation is provided', async () => {
     const { sut } = makeSut();
     const httpRequest = {
       body: {
@@ -130,7 +140,7 @@ describe('Auth Controller', () => {
     expect(promise).rejects.toEqual(new MissingParamError('passwordConfirmation'));
   });
 
-  test('Should return 400 if password confirmation fails', async () => {
+  test('Should return an error if password confirmation fails', async () => {
     const { sut } = makeSut();
     const httpRequest = {
       body: {
@@ -143,5 +153,13 @@ describe('Auth Controller', () => {
     const promise = sut.signUp(httpRequest);
 
     expect(promise).rejects.toEqual(new InvalidParamError('The password does not match the password confirmation'));
+  });
+
+  test('Should return an error on sign up if an invalid email is provided', async () => {
+    const { sut, emailValidatorStub } = makeSut();
+    jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false);
+    const promise = sut.signUp(makeFakeRequest());
+
+    expect(promise).rejects.toEqual(new InvalidParamError("'email' is not valid"));
   });
 });
