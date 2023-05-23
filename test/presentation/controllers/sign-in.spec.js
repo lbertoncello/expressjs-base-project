@@ -2,6 +2,7 @@ import { jest } from '@jest/globals';
 import SignInController from '../../../src/presentation/controllers/auth/sign-in.js';
 import MissingParamError from '../../../src/presentation/errors/missing-param-error.js';
 import InvalidParamError from '../../../src/presentation/errors/invalid-param-error.js';
+import ClientError from '../../../src/presentation/errors/client-error.js';
 import SuccessResponse from '../../../src/presentation/responses/success-response.js';
 
 const makeFakeSignIn = () => ({
@@ -75,6 +76,21 @@ describe('Sign In Controller', () => {
     const promise = sut.handle(httpRequest);
 
     expect(promise).rejects.toEqual(new MissingParamError('password'));
+  });
+
+  test('Should return an error if the password does not match', async () => {
+    const { sut, signInStub } = makeSut();
+    // When the password does not match, false will be returned
+    jest.spyOn(signInStub, 'execute').mockResolvedValueOnce(false);
+    const httpRequest = {
+      body: {
+        email: 'valid_email@mail.com',
+        password: 'wrong_password',
+      },
+    };
+    const promise = sut.handle(httpRequest);
+
+    expect(promise).rejects.toEqual(new ClientError('Password does not match or the user does not exist', 401));
   });
 
   test('Should return an error if an invalid email is provided', async () => {
