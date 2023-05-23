@@ -161,4 +161,14 @@ describe('Sign Up Controller', () => {
       password: 'any_password',
     });
   });
+
+  test('Should throw an error if EmailValidator throws', async () => {
+    const { sut, signUpStub } = makeSut();
+    jest.spyOn(signUpStub, 'execute').mockImplementationOnce(() => {
+      throw new Error();
+    });
+    const promise = sut.handle(makeFakeRequest());
+
+    expect(promise).rejects.toEqual(new Error());
+  });
 });
