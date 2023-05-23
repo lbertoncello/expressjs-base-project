@@ -1,5 +1,6 @@
 import AuthController from '../../../src/presentation/controllers/auth-controller';
 import MissingParamError from '../../../src/presentation/errors/missing-param-error';
+import InvalidParamError from '../../../src/presentation/errors/invalid-param-error';
 
 const makeRepository = () => {
   class UserRepositoryStub {
@@ -127,5 +128,20 @@ describe('Auth Controller', () => {
     const promise = sut.signUp(httpRequest);
 
     expect(promise).rejects.toEqual(new MissingParamError('passwordConfirmation'));
+  });
+
+  test('Should return 400 if password confirmation fails', async () => {
+    const { sut } = makeSut();
+    const httpRequest = {
+      body: {
+        name: 'valid_name',
+        email: 'valid_email@mail.com',
+        password: 'any_password',
+        passwordConfirmation: 'invalid_password',
+      },
+    };
+    const promise = sut.signUp(httpRequest);
+
+    expect(promise).rejects.toEqual(new InvalidParamError('The password does not match the password confirmation'));
   });
 });
