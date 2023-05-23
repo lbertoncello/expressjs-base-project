@@ -25,7 +25,7 @@ export default class SignUpController {
     const isEmailValid = this.emailValidator.isValid(email);
     if (!isEmailValid) throw new InvalidParamError("'email' is not valid");
 
-    const result = await this.signUp.execute(name, email, password);
+    const result = await this.signUp.execute({ name, email, password });
     if (!result) throw new ClientError('User already exists', 401);
 
     return new SuccessResponse(result);

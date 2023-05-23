@@ -5,9 +5,9 @@ export default class UpdateGame {
     this.repository = repository;
   }
 
-  async execute(id, fields) {
+  async execute(id, gameData) {
     const allowedFieldNames = ['title', 'rating', 'summary'];
-    const filteredFields = fieldsFilter(allowedFieldNames, fields);
+    const filteredFields = fieldsFilter(allowedFieldNames, gameData);
     const result = await this.repository.updateById(id, filteredFields);
 
     return result;

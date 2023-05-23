@@ -13,7 +13,7 @@ export default class ChangePassword {
     const normalizedEmail = email.toLowerCase();
     const dbUser = await this.repository.getByEmailWithPassword(normalizedEmail);
 
-    // Check if the user provided the right old password
+    // Check if the user provided the correct old password
     const passwordMatch = await this.encrypter.compare(oldPassword, dbUser.password);
     if (!passwordMatch) {
       return this.response(false, false);

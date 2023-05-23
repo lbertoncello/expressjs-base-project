@@ -15,7 +15,7 @@ export default class AddGameController {
     }
 
     const { title, rating, summary } = req.body;
-    const result = await this.addGame.execute(title, rating, summary);
+    const result = await this.addGame.execute({ title, rating, summary });
 
     return new SuccessResponse(result);
   }

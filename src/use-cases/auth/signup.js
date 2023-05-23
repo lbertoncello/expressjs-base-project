@@ -7,7 +7,8 @@ export default class SignUp {
     this.encrypter = encrypter;
   }
 
-  async execute(name, email, password) {
+  async execute(userData) {
+    const { name, email, password } = userData;
     const normalizedEmail = email.toLowerCase();
     const dbUser = await this.repository.getByEmail(normalizedEmail);
     if (dbUser) {

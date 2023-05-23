@@ -5,7 +5,8 @@ export default class AddGame {
     this.repository = repository;
   }
 
-  async execute(title, rating, summary) {
+  async execute(gameData) {
+    const { title, rating, summary } = gameData;
     const game = new Game(title, rating, summary);
 
     return await this.repository.create(game);
