@@ -50,8 +50,8 @@ const makeSut = () => {
   };
 };
 
-describe('Auth Controller', () => {
-  test('Should return an error on sign up if no name is provided', async () => {
+describe('Sign Up Controller', () => {
+  test('Should return an error if no name is provided', async () => {
     const { sut } = makeSut();
     const httpRequest = {
       body: {
@@ -65,7 +65,7 @@ describe('Auth Controller', () => {
     expect(promise).rejects.toEqual(new MissingParamError('name'));
   });
 
-  test('Should return an error on sign up if no email is provided', async () => {
+  test('Should return an error if no email is provided', async () => {
     const { sut } = makeSut();
     const httpRequest = {
       body: {
@@ -79,7 +79,7 @@ describe('Auth Controller', () => {
     expect(promise).rejects.toEqual(new MissingParamError('email'));
   });
 
-  test('Should return an error on sign up if no password is provided', async () => {
+  test('Should return an error if no password is provided', async () => {
     const { sut } = makeSut();
     const httpRequest = {
       body: {
@@ -93,7 +93,7 @@ describe('Auth Controller', () => {
     expect(promise).rejects.toEqual(new MissingParamError('password'));
   });
 
-  test('Should return an error on sign up if no passwordConfirmation is provided', async () => {
+  test('Should return an error if no passwordConfirmation is provided', async () => {
     const { sut } = makeSut();
     const httpRequest = {
       body: {
@@ -122,11 +122,20 @@ describe('Auth Controller', () => {
     expect(promise).rejects.toEqual(new InvalidParamError('The password does not match the password confirmation'));
   });
 
-  test('Should return an error on sign up if an invalid email is provided', async () => {
+  test('Should return an error if an invalid email is provided', async () => {
     const { sut, emailValidatorStub } = makeSut();
     jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false);
     const promise = sut.handle(makeFakeRequest());
 
     expect(promise).rejects.toEqual(new InvalidParamError("'email' is not valid"));
+  });
+
+  test('Should call EmailValidator with correct values', async () => {
+    const { sut, emailValidatorStub } = makeSut();
+    const isValidSpy = jest.spyOn(emailValidatorStub, 'isValid');
+    const fakeRequest = makeFakeRequest();
+    await sut.handle(fakeRequest);
+
+    expect(isValidSpy).toHaveBeenCalledWith(fakeRequest.body.email);
   });
 });
