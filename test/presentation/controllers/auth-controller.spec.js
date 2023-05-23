@@ -2,6 +2,7 @@ import { jest } from '@jest/globals';
 import SignUpController from '../../../src/presentation/controllers/auth/sign-up.js';
 import MissingParamError from '../../../src/presentation/errors/missing-param-error';
 import InvalidParamError from '../../../src/presentation/errors/invalid-param-error';
+import SuccessResponse from '../../../src/presentation/responses/success-response.js';
 
 const makeFakeUser = () => ({
   id: 'valid_id',
@@ -170,5 +171,12 @@ describe('Sign Up Controller', () => {
     const promise = sut.handle(makeFakeRequest());
 
     expect(promise).rejects.toEqual(new Error());
+  });
+
+  test('Should return 200 if valid data is provided', async () => {
+    const { sut } = makeSut();
+    const httpResponse = await sut.handle(makeFakeRequest());
+
+    expect(httpResponse).toEqual(new SuccessResponse(makeFakeUser()));
   });
 });
