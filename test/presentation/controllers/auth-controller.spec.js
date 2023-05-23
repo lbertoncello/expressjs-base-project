@@ -100,4 +100,18 @@ describe('Auth Controller', () => {
 
     expect(promise).rejects.toEqual(new MissingParamError('email'));
   });
+
+  test('Should return 400 on sign up if no password is provided', async () => {
+    const { sut } = makeSut();
+    const httpRequest = {
+      body: {
+        name: 'valid_name',
+        email: 'valid_email@mail.com',
+        passwordConfirmation: 'any_password',
+      },
+    };
+    const promise = sut.signUp(httpRequest);
+
+    expect(promise).rejects.toEqual(new MissingParamError('password'));
+  });
 });
