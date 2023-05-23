@@ -27,10 +27,11 @@ export const makeSignUpController = () => {
 export const makeSignInController = () => {
   const database = new UserDatabase();
   const repository = new UserRepository(database);
+  const emailValidatorAdapter = new EmailValidatorAdapter();
   const bcryptAdapter = new BcryptAdapter();
   const jwtAdapter = new JwtAdapter(envConfig.secrets.jwt, envConfig.secrets.jwtExp);
   const signIn = new SignIn(repository, bcryptAdapter, jwtAdapter);
-  const controller = new SignInController(signIn);
+  const controller = new SignInController(signIn, emailValidatorAdapter);
 
   return controller;
 };
