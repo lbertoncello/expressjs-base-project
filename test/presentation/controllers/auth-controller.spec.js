@@ -46,6 +46,7 @@ const makeSut = () => {
 
   return {
     sut,
+    signUpStub,
     emailValidatorStub,
   };
 };
@@ -147,5 +148,17 @@ describe('Sign Up Controller', () => {
     const promise = sut.handle(makeFakeRequest());
 
     expect(promise).rejects.toEqual(new Error());
+  });
+
+  test('Should execute the use case SignUp with correct values', async () => {
+    const { sut, signUpStub } = makeSut();
+    const signUpSpy = jest.spyOn(signUpStub, 'execute');
+    await sut.handle(makeFakeRequest());
+
+    expect(signUpSpy).toHaveBeenCalledWith({
+      name: 'any_name',
+      email: 'any_email@mail.com',
+      password: 'any_password',
+    });
   });
 });
