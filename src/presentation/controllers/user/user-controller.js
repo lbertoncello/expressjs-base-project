@@ -1,9 +1,9 @@
-import GetUserUseCase from '../../use-cases/user/get-user.js';
-import UpdateUserUseCase from '../../use-cases/user/update-user.js';
-import DeleteUserUseCase from '../../use-cases/user/delete-user.js';
-import SuccessResponse from '../responses/success-response.js';
-import InvalidParamError from '../errors/invalid-param-error.js';
-import ClientError from '../errors/client-error.js';
+import GetUserUseCase from '../../../use-cases/user/get-user.js';
+import UpdateUserUseCase from '../../../use-cases/user/update-user.js';
+import DeleteUserUseCase from '../../../use-cases/user/delete-user.js';
+import SuccessResponse from '../../responses/success-response.js';
+import InvalidParamError from '../../errors/invalid-param-error.js';
+import ClientError from '../../errors/client-error.js';
 
 export default class UserController {
   constructor(repository) {

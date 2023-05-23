@@ -1,12 +1,12 @@
-import SignUp from '../../use-cases/auth/signup.js';
-import SignIn from '../../use-cases/auth/signin.js';
-import ChangePassword from '../../use-cases/auth/change-password.js';
-import SignOut from '../../use-cases/auth/signout.js';
-import SuccessResponse from '../responses/success-response.js';
-import InvalidParamError from '../errors/invalid-param-error.js';
-import MissingParamError from '../errors/missing-param-error.js';
-import ClientError from '../errors/client-error.js';
-import ApplicationError from '../errors/application-error.js';
+import SignUp from '../../../use-cases/auth/signup.js';
+import SignIn from '../../../use-cases/auth/signin.js';
+import ChangePassword from '../../../use-cases/auth/change-password.js';
+import SignOut from '../../../use-cases/auth/signout.js';
+import SuccessResponse from '../../responses/success-response.js';
+import InvalidParamError from '../../errors/invalid-param-error.js';
+import MissingParamError from '../../errors/missing-param-error.js';
+import ClientError from '../../errors/client-error.js';
+import ApplicationError from '../../errors/application-error.js';
 
 export default class AuthController {
   constructor(repository, emailValidator, encrypter, tokenizer) {

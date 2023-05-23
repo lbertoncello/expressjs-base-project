@@ -1,12 +1,12 @@
-import AddGame from '../../use-cases/game/add-game.js';
-import SuccessResponse from '../responses/success-response.js';
-import InvalidParamError from '../errors/invalid-param-error.js';
-import MissingParamError from '../errors/missing-param-error.js';
-import ClientError from '../errors/client-error.js';
-import GetGameUseCase from '../../use-cases/game/get-game.js';
-import GetAllGamesUseCase from '../../use-cases/game/get-all-games.js';
-import DeleteGameUseCase from '../../use-cases/game/delete-game.js';
-import UpdateGameUseCase from '../../use-cases/game/update-game.js';
+import AddGame from '../../../use-cases/game/add-game.js';
+import SuccessResponse from '../../responses/success-response.js';
+import InvalidParamError from '../../errors/invalid-param-error.js';
+import MissingParamError from '../../errors/missing-param-error.js';
+import ClientError from '../../errors/client-error.js';
+import GetGameUseCase from '../../../use-cases/game/get-game.js';
+import GetAllGamesUseCase from '../../../use-cases/game/get-all-games.js';
+import DeleteGameUseCase from '../../../use-cases/game/delete-game.js';
+import UpdateGameUseCase from '../../../use-cases/game/update-game.js';
 
 export default class GameController {
   constructor(repository) {

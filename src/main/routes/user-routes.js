@@ -1,15 +1,21 @@
 import express from 'express';
-import { makeUserController } from '../factories/user.js';
+import {
+  makeGetMyUserDataController,
+  makeUpdateMyUserDataController,
+  makeDeleteMyUserController,
+} from '../factories/user.js';
 import { adaptRoute } from '../adapters/express-router-adapter.js';
 
 const router = express.Router();
-const controller = makeUserController();
+const getMyUserDataController = makeGetMyUserDataController();
+const updateMyUserDataController = makeUpdateMyUserDataController();
+const deleteMyUserDataController = makeDeleteMyUserController();
 
 router
   .route('/me')
-  .get(adaptRoute(controller.getMyUserData.bind(controller)))
-  .put(adaptRoute(controller.updateMyUserData.bind(controller)))
-  .patch(adaptRoute(controller.updateMyUserData.bind(controller)))
-  .delete(adaptRoute(controller.deleteMyUser.bind(controller)));
+  .get(adaptRoute(getMyUserDataController.handle.bind(getMyUserDataController)))
+  .put(adaptRoute(updateMyUserDataController.handle.bind(updateMyUserDataController)))
+  .patch(adaptRoute(updateMyUserDataController.handle.bind(updateMyUserDataController)))
+  .delete(adaptRoute(deleteMyUserDataController.handle.bind(deleteMyUserDataController)));
 
 export default router;

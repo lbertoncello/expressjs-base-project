@@ -1,71 +1,7 @@
 import { jest } from '@jest/globals';
-import AuthController from '../../../src/presentation/controllers/auth-controller';
+import SignUpController from '../../../src/presentation/controllers/auth/sign-up.js';
 import MissingParamError from '../../../src/presentation/errors/missing-param-error';
 import InvalidParamError from '../../../src/presentation/errors/invalid-param-error';
-
-const makeRepository = () => {
-  class UserRepositoryStub {
-    async create(user) {
-      return await new Promise((resolve) => resolve(makeFakeUser()));
-    }
-  }
-
-  return new UserRepositoryStub();
-};
-
-const makeEmailValidator = () => {
-  class EmailValidatorStub {
-    isValid(account) {
-      return true;
-    }
-  }
-
-  return new EmailValidatorStub();
-};
-
-const makeEncrypter = () => {
-  class EncrypterStub {
-    async encrypt(value) {
-      return new Promise((resolve) => resolve('encrypted_string'));
-    }
-
-    async compare(value, encryptedValue) {
-      return new Promise((resolve) => resolve(true));
-    }
-  }
-
-  return new EncrypterStub();
-};
-
-const makeTokenizer = () => {
-  class TokenizerStub {
-    async tokenize(value) {
-      return new Promise((resolve) => resolve('token'));
-    }
-
-    async verify(token) {
-      return new Promise((resolve) => resolve(true));
-    }
-  }
-
-  return new TokenizerStub();
-};
-
-const makeSut = () => {
-  const repositoryStub = makeRepository();
-  const emailValidatorStub = makeEmailValidator();
-  const encrypterStub = makeEncrypter();
-  const tokenizerStub = makeTokenizer();
-  const sut = new AuthController(repositoryStub, emailValidatorStub, encrypterStub, tokenizerStub);
-
-  return {
-    sut,
-    repositoryStub,
-    emailValidatorStub,
-    encrypterStub,
-    tokenizerStub,
-  };
-};
 
 const makeFakeUser = () => ({
   id: 'valid_id',
@@ -83,6 +19,37 @@ const makeFakeRequest = () => ({
   },
 });
 
+const makeEmailValidator = () => {
+  class EmailValidatorStub {
+    isValid(account) {
+      return true;
+    }
+  }
+
+  return new EmailValidatorStub();
+};
+
+const makeSignUp = () => {
+  class SignUpStub {
+    async execute(name, email, password) {
+      return await new Promise((resolve) => resolve(makeFakeUser()));
+    }
+  }
+
+  return new SignUpStub();
+};
+
+const makeSut = () => {
+  const signUpStub = makeSignUp();
+  const emailValidatorStub = makeEmailValidator();
+  const sut = new SignUpController(signUpStub, emailValidatorStub);
+
+  return {
+    sut,
+    emailValidatorStub,
+  };
+};
+
 describe('Auth Controller', () => {
   test('Should return an error on sign up if no name is provided', async () => {
     const { sut } = makeSut();
@@ -93,7 +60,7 @@ describe('Auth Controller', () => {
         passwordConfirmation: 'any_password',
       },
     };
-    const promise = sut.signUp(httpRequest);
+    const promise = sut.handle(httpRequest);
 
     expect(promise).rejects.toEqual(new MissingParamError('name'));
   });
@@ -107,7 +74,7 @@ describe('Auth Controller', () => {
         passwordConfirmation: 'any_password',
       },
     };
-    const promise = sut.signUp(httpRequest);
+    const promise = sut.handle(httpRequest);
 
     expect(promise).rejects.toEqual(new MissingParamError('email'));
   });
@@ -121,7 +88,7 @@ describe('Auth Controller', () => {
         passwordConfirmation: 'any_password',
       },
     };
-    const promise = sut.signUp(httpRequest);
+    const promise = sut.handle(httpRequest);
 
     expect(promise).rejects.toEqual(new MissingParamError('password'));
   });
@@ -135,7 +102,7 @@ describe('Auth Controller', () => {
         password: 'any_password',
       },
     };
-    const promise = sut.signUp(httpRequest);
+    const promise = sut.handle(httpRequest);
 
     expect(promise).rejects.toEqual(new MissingParamError('passwordConfirmation'));
   });
@@ -150,7 +117,7 @@ describe('Auth Controller', () => {
         passwordConfirmation: 'invalid_password',
       },
     };
-    const promise = sut.signUp(httpRequest);
+    const promise = sut.handle(httpRequest);
 
     expect(promise).rejects.toEqual(new InvalidParamError('The password does not match the password confirmation'));
   });
@@ -158,7 +125,7 @@ describe('Auth Controller', () => {
   test('Should return an error on sign up if an invalid email is provided', async () => {
     const { sut, emailValidatorStub } = makeSut();
     jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false);
-    const promise = sut.signUp(makeFakeRequest());
+    const promise = sut.handle(makeFakeRequest());
 
     expect(promise).rejects.toEqual(new InvalidParamError("'email' is not valid"));
   });
