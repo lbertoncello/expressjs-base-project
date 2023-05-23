@@ -1,22 +1,22 @@
 import { jest } from '@jest/globals';
-import SignUpController from '../../../src/presentation/controllers/auth/sign-up.js';
+import SignInController from '../../../src/presentation/controllers/auth/sign-in.js';
 import MissingParamError from '../../../src/presentation/errors/missing-param-error.js';
 import InvalidParamError from '../../../src/presentation/errors/invalid-param-error.js';
 import SuccessResponse from '../../../src/presentation/responses/success-response.js';
 
-const makeFakeUser = () => ({
-  id: 'valid_id',
-  name: 'valid_name',
-  email: 'valid_email@mail.com',
-  password: 'valid_password',
+const makeFakeSignIn = () => ({
+  token: 'valid_token',
+  user: {
+    id: 'valid_id',
+    name: 'valid_name',
+    email: 'valid_email@mail.com',
+  },
 });
 
 const makeFakeRequest = () => ({
   body: {
-    name: 'any_name',
     email: 'any_email@mail.com',
     password: 'any_password',
-    passwordConfirmation: 'any_password',
   },
 });
 
@@ -30,50 +30,34 @@ const makeEmailValidator = () => {
   return new EmailValidatorStub();
 };
 
-const makeSignUp = () => {
-  class SignUpStub {
-    async execute(name, email, password) {
-      return await new Promise((resolve) => resolve(makeFakeUser()));
+const makeSignIn = () => {
+  class SignInStub {
+    async execute(email, password) {
+      return await new Promise((resolve) => resolve(makeFakeSignIn()));
     }
   }
 
-  return new SignUpStub();
+  return new SignInStub();
 };
 
 const makeSut = () => {
-  const signUpStub = makeSignUp();
+  const signInStub = makeSignIn();
   const emailValidatorStub = makeEmailValidator();
-  const sut = new SignUpController(signUpStub, emailValidatorStub);
+  const sut = new SignInController(signInStub, emailValidatorStub);
 
   return {
     sut,
-    signUpStub,
+    signInStub,
     emailValidatorStub,
   };
 };
 
-describe('Sign Up Controller', () => {
-  test('Should return an error if no name is provided', async () => {
-    const { sut } = makeSut();
-    const httpRequest = {
-      body: {
-        email: 'any_email@mail.com',
-        password: 'any_password',
-        passwordConfirmation: 'any_password',
-      },
-    };
-    const promise = sut.handle(httpRequest);
-
-    expect(promise).rejects.toEqual(new MissingParamError('name'));
-  });
-
+describe('Sign In Controller', () => {
   test('Should return an error if no email is provided', async () => {
     const { sut } = makeSut();
     const httpRequest = {
       body: {
-        name: 'valid_name',
         password: 'any_password',
-        passwordConfirmation: 'any_password',
       },
     };
     const promise = sut.handle(httpRequest);
@@ -85,43 +69,12 @@ describe('Sign Up Controller', () => {
     const { sut } = makeSut();
     const httpRequest = {
       body: {
-        name: 'valid_name',
         email: 'valid_email@mail.com',
-        passwordConfirmation: 'any_password',
       },
     };
     const promise = sut.handle(httpRequest);
 
     expect(promise).rejects.toEqual(new MissingParamError('password'));
-  });
-
-  test('Should return an error if no passwordConfirmation is provided', async () => {
-    const { sut } = makeSut();
-    const httpRequest = {
-      body: {
-        name: 'valid_name',
-        email: 'valid_email@mail.com',
-        password: 'any_password',
-      },
-    };
-    const promise = sut.handle(httpRequest);
-
-    expect(promise).rejects.toEqual(new MissingParamError('passwordConfirmation'));
-  });
-
-  test('Should return an error if password confirmation fails', async () => {
-    const { sut } = makeSut();
-    const httpRequest = {
-      body: {
-        name: 'valid_name',
-        email: 'valid_email@mail.com',
-        password: 'any_password',
-        passwordConfirmation: 'invalid_password',
-      },
-    };
-    const promise = sut.handle(httpRequest);
-
-    expect(promise).rejects.toEqual(new InvalidParamError('The password does not match the password confirmation'));
   });
 
   test('Should return an error if an invalid email is provided', async () => {
@@ -151,21 +104,17 @@ describe('Sign Up Controller', () => {
     expect(promise).rejects.toEqual(new Error());
   });
 
-  test('Should execute the use case SignUp with correct values', async () => {
-    const { sut, signUpStub } = makeSut();
-    const signUpSpy = jest.spyOn(signUpStub, 'execute');
+  test('Should execute the use case SignIn with correct values', async () => {
+    const { sut, signInStub } = makeSut();
+    const signInSpy = jest.spyOn(signInStub, 'execute');
     await sut.handle(makeFakeRequest());
 
-    expect(signUpSpy).toHaveBeenCalledWith({
-      name: 'any_name',
-      email: 'any_email@mail.com',
-      password: 'any_password',
-    });
+    expect(signInSpy).toHaveBeenCalledWith('any_email@mail.com', 'any_password');
   });
 
-  test('Should throw an error if the use case SignUp throws', async () => {
-    const { sut, signUpStub } = makeSut();
-    jest.spyOn(signUpStub, 'execute').mockImplementationOnce(() => {
+  test('Should throw an error if the use case SignIn throws', async () => {
+    const { sut, signInStub } = makeSut();
+    jest.spyOn(signInStub, 'execute').mockImplementationOnce(() => {
       throw new Error();
     });
     const promise = sut.handle(makeFakeRequest());
@@ -177,6 +126,6 @@ describe('Sign Up Controller', () => {
     const { sut } = makeSut();
     const httpResponse = await sut.handle(makeFakeRequest());
 
-    expect(httpResponse).toEqual(new SuccessResponse(makeFakeUser()));
+    expect(httpResponse).toEqual(new SuccessResponse(makeFakeSignIn()));
   });
 });
