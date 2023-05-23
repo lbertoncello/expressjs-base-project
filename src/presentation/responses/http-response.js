@@ -1,6 +1,5 @@
 export default class HttpResponse {
-  constructor(status, success, data) {
-    this.status = status;
+  constructor(success, data) {
     this.body = {
       success,
       data,

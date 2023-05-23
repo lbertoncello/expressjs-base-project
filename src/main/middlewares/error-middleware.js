@@ -8,9 +8,9 @@ export default (err, req, res, next) => {
     logger.debug(err);
     const message = `${err.name}: ${err.message}`;
 
-    res.status(err.status).json(new ApplicationErrorResponse(err.status, message).body);
+    res.status(err.status).json(new ApplicationErrorResponse(message));
   } else {
     logger.error(err);
-    res.status(500).json(new ServerErrorResponse().body);
+    res.status(500).json(new ServerErrorResponse());
   }
 };
