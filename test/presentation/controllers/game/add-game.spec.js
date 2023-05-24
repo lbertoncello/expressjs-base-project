@@ -121,6 +121,16 @@ describe('Add Game Controller', () => {
     expect(isValidSpy).toHaveBeenCalledWith(fakeRequest.body.rating);
   });
 
+  test('Should throw an error if FloatValidator throws', async () => {
+    const { sut, floatValidatorStub } = makeSut();
+    jest.spyOn(floatValidatorStub, 'isValid').mockImplementationOnce(() => {
+      throw new Error();
+    });
+    const promise = sut.handle(makeFakeRequest());
+
+    expect(promise).rejects.toEqual(new Error());
+  });
+
   test('Should execute the use case AddGame with correct values', async () => {
     const { sut, addGameStub } = makeSut();
     const addGameSpy = jest.spyOn(addGameStub, 'execute');
