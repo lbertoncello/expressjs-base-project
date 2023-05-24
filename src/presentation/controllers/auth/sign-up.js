@@ -4,9 +4,10 @@ import MissingParamError from '../../errors/missing-param-error.js';
 import ClientError from '../../errors/client-error.js';
 
 export default class SignUpController {
-  constructor(signUp, emailValidator) {
+  constructor(signUp, emailValidator, passwordValidatorAdapter) {
     this.signUp = signUp;
     this.emailValidator = emailValidator;
+    this.passwordValidatorAdapter = passwordValidatorAdapter;
   }
 
   // TODO add rule to refuse weak passwords
@@ -22,6 +23,8 @@ export default class SignUpController {
     if (password !== passwordConfirmation)
       throw new InvalidParamError('The password does not match the password confirmation');
 
+    const isPasswordValid = this.passwordValidatorAdapter.isValid(password);
+    if (!isPasswordValid) throw new InvalidParamError('Your password must be stronger');
     const isEmailValid = this.emailValidator.isValid(email);
     if (!isEmailValid) throw new InvalidParamError("'email' is not valid");
 

@@ -30,8 +30,8 @@ describe('Auth Routes', () => {
       .send({
         name: 'Lucas',
         email: 'lucas@mail.com',
-        password: '123',
-        passwordConfirmation: '123',
+        password: 'sTronG_password!1',
+        passwordConfirmation: 'sTronG_password!1',
       })
       .expect(200);
     const user = res.body.data;
@@ -44,15 +44,15 @@ describe('Auth Routes', () => {
     await request(app).post('/api/v1/auth/signup').send({
       name: 'Lucas',
       email: 'lucas@mail.com',
-      password: '123',
-      passwordConfirmation: '123',
+      password: 'sTronG_password!1',
+      passwordConfirmation: 'sTronG_password!1',
     });
 
     const res = await request(app)
       .post('/api/v1/auth/signin')
       .send({
         email: 'lucas@mail.com',
-        password: '123',
+        password: 'sTronG_password!1',
       })
       .expect(200);
 
@@ -69,14 +69,14 @@ describe('Auth Routes', () => {
     await request(app).post('/api/v1/auth/signup').send({
       name: 'Lucas',
       email: 'lucas@mail.com',
-      password: '123',
-      passwordConfirmation: '123',
+      password: 'sTronG_password!1',
+      passwordConfirmation: 'sTronG_password!1',
     });
     const signInRes = await request(app)
       .post('/api/v1/auth/signin')
       .send({
         email: 'lucas@mail.com',
-        password: '123',
+        password: 'sTronG_password!1',
       })
       .expect(200);
     const token = signInRes.body.data.token;
@@ -84,9 +84,9 @@ describe('Auth Routes', () => {
     const changePasswordRes = await request(app)
       .post('/api/v1/auth/password')
       .send({
-        password: 'abcd',
-        passwordConfirmation: 'abcd',
-        oldPassword: '123',
+        password: 'sTronG_password!2',
+        passwordConfirmation: 'sTronG_password!2',
+        oldPassword: 'sTronG_password!1',
       })
       .set('Authorization', `Bearer ${token}`)
       .expect(200);
@@ -94,7 +94,7 @@ describe('Auth Routes', () => {
     const feedback = changePasswordRes.body.data;
     const bcrypterAdapter = new BcrypterAdapter();
     const dbUser = await database.findOne({ email: 'lucas@mail.com' }).select('+password').lean();
-    const passwordMatch = await bcrypterAdapter.compare('abcd', dbUser.password);
+    const passwordMatch = await bcrypterAdapter.compare('sTronG_password!2', dbUser.password);
 
     expect(feedback.previousPasswordMatch).toBeTruthy();
     expect(feedback.updated).toBeTruthy();
@@ -105,14 +105,14 @@ describe('Auth Routes', () => {
     await request(app).post('/api/v1/auth/signup').send({
       name: 'Lucas',
       email: 'lucas@mail.com',
-      password: '123',
-      passwordConfirmation: '123',
+      password: 'sTronG_password!1',
+      passwordConfirmation: 'sTronG_password!1',
     });
     const signInRes = await request(app)
       .post('/api/v1/auth/signin')
       .send({
         email: 'lucas@mail.com',
-        password: '123',
+        password: 'sTronG_password!1',
       })
       .expect(200);
     const token = signInRes.body.data.token;
