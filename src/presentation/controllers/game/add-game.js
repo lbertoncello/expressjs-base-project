@@ -6,6 +6,7 @@ export default class AddGameController {
     this.addGame = addGame;
   }
 
+  // TODO add data type validation
   async handle(req) {
     const requiredFielsd = ['title', 'rating', 'summary'];
     for (const requiredField of requiredFielsd) {
