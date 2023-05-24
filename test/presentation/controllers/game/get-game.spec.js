@@ -1,9 +1,9 @@
 import { jest } from '@jest/globals';
-import GetGameByIdController from '../../../../src/presentation/controllers/game/get-game-by-id.js';
+import GetGameController from '../../../../src/presentation/controllers/game/get-game.js';
 import ClientError from '../../../../src/presentation/errors/client-error.js';
 import SuccessResponse from '../../../../src/presentation/responses/success-response.js';
 
-const makeFakeGetGameByIdResponse = () => ({
+const makeFakeGetGameResponse = () => ({
   id: 'valid_id',
   title: 'valid_title',
   rating: 1,
@@ -22,52 +22,52 @@ const makeFakeRequest = () => ({
   },
 });
 
-const makeGetGameById = () => {
-  class GetGameByIdStub {
+const makeGetGame = () => {
+  class GetGameStub {
     async execute(id) {
-      return await new Promise((resolve) => resolve(makeFakeGetGameByIdResponse()));
+      return await new Promise((resolve) => resolve(makeFakeGetGameResponse()));
     }
   }
 
-  return new GetGameByIdStub();
+  return new GetGameStub();
 };
 
 const makeSut = () => {
-  const getGameByIdStub = makeGetGameById();
-  const sut = new GetGameByIdController(getGameByIdStub);
+  const getGameStub = makeGetGame();
+  const sut = new GetGameController(getGameStub);
 
   return {
     sut,
-    getGameByIdStub,
+    getGameStub,
   };
 };
 
 describe('Get Game By Id Controller', () => {
   test('Should return an error if there is no record with the provided id', async () => {
-    const { sut, getGameByIdStub } = makeSut();
+    const { sut, getGameStub } = makeSut();
     const httpRequest = {
       params: {
         id: 'invalid_id',
       },
     };
-    jest.spyOn(getGameByIdStub, 'execute').mockResolvedValueOnce(false);
+    jest.spyOn(getGameStub, 'execute').mockResolvedValueOnce(false);
     const promise = sut.handle(httpRequest);
 
     expect(promise).rejects.toEqual(new ClientError('It was not possible to retrieve the specified record', 400));
   });
 
-  test('Should execute the use case GetGameById with correct values', async () => {
-    const { sut, getGameByIdStub } = makeSut();
-    const getGameByIdSpy = jest.spyOn(getGameByIdStub, 'execute');
+  test('Should execute the use case GetGame with correct values', async () => {
+    const { sut, getGameStub } = makeSut();
+    const getGameSpy = jest.spyOn(getGameStub, 'execute');
     const fakeRequest = makeFakeRequest();
     await sut.handle(fakeRequest);
 
-    expect(getGameByIdSpy).toHaveBeenCalledWith(fakeRequest.params.id);
+    expect(getGameSpy).toHaveBeenCalledWith(fakeRequest.params.id);
   });
 
-  test('Should throw an error if the use case GetGameById throws', async () => {
-    const { sut, getGameByIdStub } = makeSut();
-    jest.spyOn(getGameByIdStub, 'execute').mockImplementationOnce(() => {
+  test('Should throw an error if the use case GetGame throws', async () => {
+    const { sut, getGameStub } = makeSut();
+    jest.spyOn(getGameStub, 'execute').mockImplementationOnce(() => {
       throw new Error();
     });
     const promise = sut.handle(makeFakeRequest());
@@ -79,6 +79,6 @@ describe('Get Game By Id Controller', () => {
     const { sut } = makeSut();
     const httpResponse = await sut.handle(makeFakeRequest());
 
-    expect(httpResponse).toEqual(new SuccessResponse(makeFakeGetGameByIdResponse()));
+    expect(httpResponse).toEqual(new SuccessResponse(makeFakeGetGameResponse()));
   });
 });

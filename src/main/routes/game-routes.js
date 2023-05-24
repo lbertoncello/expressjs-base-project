@@ -2,26 +2,26 @@ import express from 'express';
 import { adaptRoute } from '../adapters/express-router-adapter.js';
 import {
   makeAddGameController,
-  makeGetGameByIdController,
+  makeGetGameController,
   makeGetAllGamesController,
-  makeUpdateGameByIdController,
-  makeDeleteGameByIdController,
+  makeUpdateGameController,
+  makeDeleteGameController,
 } from '../factories/game.js';
 
 const router = express.Router();
 const addGameController = makeAddGameController();
-const getGameByIdController = makeGetGameByIdController();
+const getGameController = makeGetGameController();
 const getAllGamesController = makeGetAllGamesController();
-const updateGameByIdController = makeUpdateGameByIdController();
-const deleteGameByIdController = makeDeleteGameByIdController();
+const updateGameController = makeUpdateGameController();
+const deleteGameController = makeDeleteGameController();
 
 router.route('/').post(adaptRoute(addGameController.handle.bind(addGameController)));
 router.route('/all').get(adaptRoute(getAllGamesController.handle.bind(getAllGamesController)));
 router
   .route('/:id')
-  .get(adaptRoute(getGameByIdController.handle.bind(getGameByIdController)))
-  .put(adaptRoute(updateGameByIdController.handle.bind(updateGameByIdController)))
-  .patch(adaptRoute(updateGameByIdController.handle.bind(updateGameByIdController)))
-  .delete(adaptRoute(deleteGameByIdController.handle.bind(deleteGameByIdController)));
+  .get(adaptRoute(getGameController.handle.bind(getGameController)))
+  .put(adaptRoute(updateGameController.handle.bind(updateGameController)))
+  .patch(adaptRoute(updateGameController.handle.bind(updateGameController)))
+  .delete(adaptRoute(deleteGameController.handle.bind(deleteGameController)));
 
 export default router;

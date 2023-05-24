@@ -1,9 +1,9 @@
 import { jest } from '@jest/globals';
-import UpdateGameByIdController from '../../../../src/presentation/controllers/game/update-game-by-id.js';
+import UpdateGameController from '../../../../src/presentation/controllers/game/update-game.js';
 import InvalidParamError from '../../../../src/presentation/errors/invalid-param-error.js';
 import SuccessResponse from '../../../../src/presentation/responses/success-response.js';
 
-const makeFakeUpdateGameById = () => ({
+const makeFakeUpdateGame = () => ({
   id: 'valid_id',
   title: 'valid_title',
   rating: 1,
@@ -27,23 +27,23 @@ const makeFakeRequest = () => ({
   },
 });
 
-const makeUpdateGameById = () => {
-  class UpdateGameByIdStub {
+const makeUpdateGame = () => {
+  class UpdateGameStub {
     async execute(id, gameData) {
-      return await new Promise((resolve) => resolve(makeFakeUpdateGameById()));
+      return await new Promise((resolve) => resolve(makeFakeUpdateGame()));
     }
   }
 
-  return new UpdateGameByIdStub();
+  return new UpdateGameStub();
 };
 
 const makeSut = () => {
-  const updateGameByIdStub = makeUpdateGameById();
-  const sut = new UpdateGameByIdController(updateGameByIdStub);
+  const updateGameStub = makeUpdateGame();
+  const sut = new UpdateGameController(updateGameStub);
 
   return {
     sut,
-    updateGameByIdStub,
+    updateGameStub,
   };
 };
 
@@ -76,18 +76,18 @@ describe('Update Game By Id Controller', () => {
     expect(promise).rejects.toEqual(new InvalidParamError('At least one field to update must be provided'));
   });
 
-  test('Should execute the use case UpdateGameById with correct values', async () => {
-    const { sut, updateGameByIdStub } = makeSut();
-    const updateGameByIdSpy = jest.spyOn(updateGameByIdStub, 'execute');
+  test('Should execute the use case UpdateGame with correct values', async () => {
+    const { sut, updateGameStub } = makeSut();
+    const updateGameSpy = jest.spyOn(updateGameStub, 'execute');
     const fakeRequest = makeFakeRequest();
     await sut.handle(fakeRequest);
 
-    expect(updateGameByIdSpy).toHaveBeenCalledWith(fakeRequest.params.id, fakeRequest.body);
+    expect(updateGameSpy).toHaveBeenCalledWith(fakeRequest.params.id, fakeRequest.body);
   });
 
-  test('Should execute the use case UpdateGameById with allowed fields being passed', async () => {
-    const { sut, updateGameByIdStub } = makeSut();
-    const updateGameByIdSpy = jest.spyOn(updateGameByIdStub, 'execute');
+  test('Should execute the use case UpdateGame with allowed fields being passed', async () => {
+    const { sut, updateGameStub } = makeSut();
+    const updateGameSpy = jest.spyOn(updateGameStub, 'execute');
     const fakeRequest = {
       params: {
         id: 'valid_id',
@@ -106,12 +106,12 @@ describe('Update Game By Id Controller', () => {
     };
     await sut.handle(fakeRequest);
 
-    expect(updateGameByIdSpy).toHaveBeenCalledWith(fakeRequest.params.id, validParameters);
+    expect(updateGameSpy).toHaveBeenCalledWith(fakeRequest.params.id, validParameters);
   });
 
-  test('Should throw an error if the use case UpdateGameById throws', async () => {
-    const { sut, updateGameByIdStub } = makeSut();
-    jest.spyOn(updateGameByIdStub, 'execute').mockImplementationOnce(() => {
+  test('Should throw an error if the use case UpdateGame throws', async () => {
+    const { sut, updateGameStub } = makeSut();
+    jest.spyOn(updateGameStub, 'execute').mockImplementationOnce(() => {
       throw new Error();
     });
     const promise = sut.handle(makeFakeRequest());
@@ -123,6 +123,6 @@ describe('Update Game By Id Controller', () => {
     const { sut } = makeSut();
     const httpResponse = await sut.handle(makeFakeRequest());
 
-    expect(httpResponse).toEqual(new SuccessResponse(makeFakeUpdateGameById()));
+    expect(httpResponse).toEqual(new SuccessResponse(makeFakeUpdateGame()));
   });
 });

@@ -2,7 +2,7 @@ import SuccessResponse from '../../responses/success-response.js';
 import InvalidParamError from '../../errors/invalid-param-error.js';
 import MissingParamError from '../../errors/missing-param-error.js';
 
-export default class UpdateGameByIdController {
+export default class UpdateGameController {
   constructor(updateGame) {
     this.updateGame = updateGame;
   }
