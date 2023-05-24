@@ -3,7 +3,7 @@ import UpdateUser from '../../use-cases/user/update-user.js';
 import DeleteUser from '../../use-cases/user/delete-user.js';
 import GetMyUserDataController from '../../presentation/controllers/user/get-my-user-data.js';
 import UpdateMyUserDataController from '../../presentation/controllers/user/update-my-user-data.js';
-import DeleteMyUserDataController from '../../presentation/controllers/user/delete-my-user.js';
+import DeleteMyUserController from '../../presentation/controllers/user/delete-my-user.js';
 import UserDatabase from '../../data-access/database/user-database.js';
 import UserRepository from '../../data-access/repositories/user-repository.js';
 
@@ -29,7 +29,7 @@ export const makeDeleteMyUserController = () => {
   const database = new UserDatabase();
   const repository = new UserRepository(database);
   const deleteUser = new DeleteUser(repository);
-  const controller = new DeleteMyUserDataController(deleteUser);
+  const controller = new DeleteMyUserController(deleteUser);
 
   return controller;
 };
