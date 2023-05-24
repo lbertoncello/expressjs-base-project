@@ -47,7 +47,7 @@ const makeSut = () => {
   };
 };
 
-describe('Update Game Controller', () => {
+describe('Update Game By Id Controller', () => {
   test('Should return an error if no valid parameter is provided', async () => {
     const { sut } = makeSut();
     const httpRequest = {
