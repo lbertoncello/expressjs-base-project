@@ -44,7 +44,7 @@ const makeSut = () => {
   };
 };
 
-describe('Sign Up Controller', () => {
+describe('Add Game Controller', () => {
   test('Should return an error if no title is provided', async () => {
     const { sut } = makeSut();
     const httpRequest = {

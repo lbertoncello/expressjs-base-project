@@ -42,7 +42,7 @@ const makeSut = () => {
   };
 };
 
-describe('Sign Up Controller', () => {
+describe('Get Game By Id Controller', () => {
   test('Should return an error if there is no record with the provided id', async () => {
     const { sut, getGameByIdStub } = makeSut();
     const httpRequest = {
