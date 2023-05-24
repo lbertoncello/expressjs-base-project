@@ -11,10 +11,20 @@ export default class UpdateGameByIdController {
     const { id } = req.params;
     if (!id) throw new MissingParamError('id');
 
-    const { title, rating, summary } = req.body;
-    if (!(title || rating || summary)) throw new InvalidParamError('At least one field to update must be provided');
+    const allowedFields = ['title', 'rating', 'summary'];
+    const gameData = {};
+    // Filter only the allowed fields
+    for (const allowedField of allowedFields) {
+      if (req.body[allowedField]) {
+        gameData[allowedField] = req.body[allowedField];
+      }
+    }
 
-    const result = await this.updateGame.execute(id, { title, rating, summary });
+    if (Object.entries(gameData).length === 0) {
+      throw new InvalidParamError('At least one field to update must be provided');
+    }
+
+    const result = await this.updateGame.execute(id, gameData);
 
     return new SuccessResponse(result);
   }
