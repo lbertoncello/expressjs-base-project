@@ -112,6 +112,15 @@ describe('Add Game Controller', () => {
     expect(promise).rejects.toEqual(new InvalidParamError("'rating' must be a float value"));
   });
 
+  test('Should call FloatValidator with correct value', async () => {
+    const { sut, floatValidatorStub } = makeSut();
+    const isValidSpy = jest.spyOn(floatValidatorStub, 'isValid');
+    const fakeRequest = makeFakeRequest();
+    await sut.handle(fakeRequest);
+
+    expect(isValidSpy).toHaveBeenCalledWith(fakeRequest.body.rating);
+  });
+
   test('Should execute the use case AddGame with correct values', async () => {
     const { sut, addGameStub } = makeSut();
     const addGameSpy = jest.spyOn(addGameStub, 'execute');
