@@ -3,7 +3,7 @@ import AddGameController from '../../../../src/presentation/controllers/game/add
 import MissingParamError from '../../../../src/presentation/errors/missing-param-error.js';
 import SuccessResponse from '../../../../src/presentation/responses/success-response.js';
 
-const makeFakeUser = () => ({
+const makeFakeAddGameResponse = () => ({
   id: 'valid_id',
   title: 'valid_title',
   rating: 1,
@@ -27,7 +27,7 @@ const makeFakeRequest = () => ({
 const makeAddGame = () => {
   class AddGameStub {
     async execute(gameData) {
-      return await new Promise((resolve) => resolve(makeFakeUser()));
+      return await new Promise((resolve) => resolve(makeFakeAddGameResponse()));
     }
   }
 
@@ -110,6 +110,6 @@ describe('Sign Up Controller', () => {
     const { sut } = makeSut();
     const httpResponse = await sut.handle(makeFakeRequest());
 
-    expect(httpResponse).toEqual(new SuccessResponse(makeFakeUser()));
+    expect(httpResponse).toEqual(new SuccessResponse(makeFakeAddGameResponse()));
   });
 });
