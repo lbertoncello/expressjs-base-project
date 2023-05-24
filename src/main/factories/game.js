@@ -16,8 +16,8 @@ export const makeAddGameController = () => {
   const database = new GameDatabase();
   const repository = new GameRepository(database);
   const addGame = new AddGame(repository);
-  const floatValidtorAdapter = new FloatValidatorAdapter();
-  const controller = new AddGameController(addGame, floatValidtorAdapter);
+  const floatValidatorAdapter = new FloatValidatorAdapter();
+  const controller = new AddGameController(addGame, floatValidatorAdapter);
 
   return controller;
 };
@@ -44,7 +44,8 @@ export const makeUpdateGameController = () => {
   const database = new GameDatabase();
   const repository = new GameRepository(database);
   const updateGame = new UpdateGame(repository);
-  const controller = new UpdateGameController(updateGame);
+  const floatValidatorAdapter = new FloatValidatorAdapter();
+  const controller = new UpdateGameController(updateGame, floatValidatorAdapter);
 
   return controller;
 };

@@ -3,8 +3,9 @@ import InvalidParamError from '../../errors/invalid-param-error.js';
 import MissingParamError from '../../errors/missing-param-error.js';
 
 export default class UpdateGameController {
-  constructor(updateGame) {
+  constructor(updateGame, floatValidator) {
     this.updateGame = updateGame;
+    this.floatValidator = floatValidator;
   }
 
   async handle(req) {
@@ -22,6 +23,9 @@ export default class UpdateGameController {
 
     if (Object.entries(gameData).length === 0) {
       throw new InvalidParamError('At least one field to update must be provided');
+    }
+    if (gameData.rating && !this.floatValidator.isValid(gameData.rating)) {
+      throw new InvalidParamError("'rating' must be a float value");
     }
 
     const result = await this.updateGame.execute(id, gameData);
