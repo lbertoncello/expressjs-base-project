@@ -3,6 +3,7 @@ import ChangePasswordController from '../../../src/presentation/controllers/auth
 import MissingParamError from '../../../src/presentation/errors/missing-param-error.js';
 import InvalidParamError from '../../../src/presentation/errors/invalid-param-error.js';
 import ClientError from '../../../src/presentation/errors/client-error.js';
+import ApplicationError from '../../../src/presentation/errors/application-error.js';
 import SuccessResponse from '../../../src/presentation/responses/success-response.js';
 
 const makeFakeChangePassword = () => ({
@@ -137,6 +138,17 @@ describe('Change Password Controller', () => {
     const promise = sut.handle(makeFakeRequest());
 
     expect(promise).rejects.toEqual(new Error());
+  });
+
+  test('Should throw an error if ChangePassword was not able to change the password', async () => {
+    const { sut, changePasswordStub } = makeSut();
+    jest.spyOn(changePasswordStub, 'execute').mockResolvedValueOnce({
+      previousPasswordMatch: true,
+      updated: false,
+    });
+    const promise = sut.handle(makeFakeRequest());
+
+    expect(promise).rejects.toEqual(new ApplicationError('It was not possible to change your password'));
   });
 
   test('Should return 200 if valid data is provided', async () => {
