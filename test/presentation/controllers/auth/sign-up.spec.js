@@ -30,6 +30,16 @@ const makeEmailValidator = () => {
   return new EmailValidatorStub();
 };
 
+const makePasswordValidator = () => {
+  class PasswordValidatorStub {
+    isValid(value) {
+      return true;
+    }
+  }
+
+  return new PasswordValidatorStub();
+};
+
 const makeSignUp = () => {
   class SignUpStub {
     async execute(name, email, password) {
@@ -43,12 +53,14 @@ const makeSignUp = () => {
 const makeSut = () => {
   const signUpStub = makeSignUp();
   const emailValidatorStub = makeEmailValidator();
-  const sut = new SignUpController(signUpStub, emailValidatorStub);
+  const passwordValidatorStub = makePasswordValidator();
+  const sut = new SignUpController(signUpStub, emailValidatorStub, passwordValidatorStub);
 
   return {
     sut,
     signUpStub,
     emailValidatorStub,
+    passwordValidatorStub,
   };
 };
 
@@ -144,6 +156,33 @@ describe('Sign Up Controller', () => {
   test('Should throw an error if EmailValidator throws', async () => {
     const { sut, emailValidatorStub } = makeSut();
     jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => {
+      throw new Error();
+    });
+    const promise = sut.handle(makeFakeRequest());
+
+    expect(promise).rejects.toEqual(new Error());
+  });
+
+  test('Should return an error if a weak is provided', async () => {
+    const { sut, passwordValidatorStub } = makeSut();
+    jest.spyOn(passwordValidatorStub, 'isValid').mockReturnValueOnce(false);
+    const promise = sut.handle(makeFakeRequest());
+
+    expect(promise).rejects.toEqual(new InvalidParamError('Your password must be stronger'));
+  });
+
+  test('Should call PasswordValidator with correct password', async () => {
+    const { sut, passwordValidatorStub } = makeSut();
+    const isValidSpy = jest.spyOn(passwordValidatorStub, 'isValid');
+    const fakeRequest = makeFakeRequest();
+    await sut.handle(fakeRequest);
+
+    expect(isValidSpy).toHaveBeenCalledWith(fakeRequest.body.password);
+  });
+
+  test('Should throw an error if PasswordValidator throws', async () => {
+    const { sut, passwordValidatorStub } = makeSut();
+    jest.spyOn(passwordValidatorStub, 'isValid').mockImplementationOnce(() => {
       throw new Error();
     });
     const promise = sut.handle(makeFakeRequest());
