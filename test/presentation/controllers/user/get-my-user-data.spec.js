@@ -21,7 +21,7 @@ const makeFakeRequest = () => ({
 
 const makeGetMyUserData = () => {
   class GetMyUserDataStub {
-    async execute(email, password) {
+    async execute(signedUser) {
       return await new Promise((resolve) => resolve(makeFakeGetMyUserData()));
     }
   }

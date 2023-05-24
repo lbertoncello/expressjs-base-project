@@ -25,7 +25,7 @@ const makeFakeRequest = () => ({
 
 const makeUpdateMyUserData = () => {
   class UpdateMyUserDataStub {
-    async execute(email, password) {
+    async execute(signedUser, userData) {
       return await new Promise((resolve) => resolve(makeFakeUpdateMyUserData()));
     }
   }
