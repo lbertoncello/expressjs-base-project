@@ -10,12 +10,14 @@ import UpdateGame from '../../use-cases/game/update-game.js';
 import DeleteGame from '../../use-cases/game/delete-game.js';
 import GameDatabase from '../../data-access/database/game-database.js';
 import GameRepository from '../../data-access/repositories/game-repository.js';
+import FloatValidatorAdapter from '../../presentation/validation/float-validator-adapter.js';
 
 export const makeAddGameController = () => {
   const database = new GameDatabase();
   const repository = new GameRepository(database);
   const addGame = new AddGame(repository);
-  const controller = new AddGameController(addGame);
+  const floatValidtorAdapter = new FloatValidatorAdapter();
+  const controller = new AddGameController(addGame, floatValidtorAdapter);
 
   return controller;
 };
