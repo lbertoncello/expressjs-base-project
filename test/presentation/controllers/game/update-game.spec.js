@@ -37,13 +37,25 @@ const makeUpdateGame = () => {
   return new UpdateGameStub();
 };
 
+const makeFloatValidatorStub = () => {
+  class FloatValidatorStub {
+    isValid(value) {
+      return true;
+    }
+  }
+
+  return new FloatValidatorStub();
+};
+
 const makeSut = () => {
   const updateGameStub = makeUpdateGame();
-  const sut = new UpdateGameController(updateGameStub);
+  const floatValidatorStub = makeFloatValidatorStub();
+  const sut = new UpdateGameController(updateGameStub, floatValidatorStub);
 
   return {
     sut,
     updateGameStub,
+    floatValidatorStub,
   };
 };
 
@@ -74,6 +86,43 @@ describe('Update Game By Id Controller', () => {
     const promise = sut.handle(httpRequest);
 
     expect(promise).rejects.toEqual(new InvalidParamError('At least one field to update must be provided'));
+  });
+
+  test('Should return an error if rating has the wrong type', async () => {
+    const { sut, floatValidatorStub } = makeSut();
+    const httpRequest = {
+      params: {
+        id: 'valid_id',
+      },
+      body: {
+        title: 'any_title',
+        rating: 'any_string',
+        summary: 'any_summary',
+      },
+    };
+    jest.spyOn(floatValidatorStub, 'isValid').mockReturnValueOnce(false);
+    const promise = sut.handle(httpRequest);
+
+    expect(promise).rejects.toEqual(new InvalidParamError("'rating' must be a float value"));
+  });
+
+  test('Should call FloatValidator with correct value', async () => {
+    const { sut, floatValidatorStub } = makeSut();
+    const isValidSpy = jest.spyOn(floatValidatorStub, 'isValid');
+    const fakeRequest = makeFakeRequest();
+    await sut.handle(fakeRequest);
+
+    expect(isValidSpy).toHaveBeenCalledWith(fakeRequest.body.rating);
+  });
+
+  test('Should throw an error if FloatValidator throws', async () => {
+    const { sut, floatValidatorStub } = makeSut();
+    jest.spyOn(floatValidatorStub, 'isValid').mockImplementationOnce(() => {
+      throw new Error();
+    });
+    const promise = sut.handle(makeFakeRequest());
+
+    expect(promise).rejects.toEqual(new Error());
   });
 
   test('Should execute the use case UpdateGame with correct values', async () => {
