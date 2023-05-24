@@ -100,4 +100,30 @@ describe('Auth Routes', () => {
     expect(feedback.updated).toBeTruthy();
     expect(passwordMatch).toBeTruthy();
   });
+
+  test('Should return a null token on Sign Out on success', async () => {
+    await request(app).post('/api/v1/auth/signup').send({
+      name: 'Lucas',
+      email: 'lucas@mail.com',
+      password: '123',
+      passwordConfirmation: '123',
+    });
+    const signInRes = await request(app)
+      .post('/api/v1/auth/signin')
+      .send({
+        email: 'lucas@mail.com',
+        password: '123',
+      })
+      .expect(200);
+    const token = signInRes.body.data.token;
+
+    const signOutRes = await request(app)
+      .post('/api/v1/auth/signout')
+      .send()
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200);
+    const feedback = signOutRes.body.data;
+
+    expect(feedback.token).toBeFalsy();
+  });
 });
