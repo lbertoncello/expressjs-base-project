@@ -2,7 +2,7 @@ import SuccessResponse from '../../responses/success-response.js';
 import MissingParamError from '../../errors/missing-param-error.js';
 import ClientError from '../../errors/client-error.js';
 
-export default class DeleteGameController {
+export default class DeleteGameByIdController {
   constructor(deleteGame) {
     this.deleteGame = deleteGame;
   }
