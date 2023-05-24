@@ -7,11 +7,20 @@ export default class UpdateMyUserDataController {
   }
 
   async handle(req) {
-    const { name } = req.body;
-    if (!name) throw new InvalidParamError('At least one field to update must be provided');
+    const allowedFields = ['name'];
+    const userData = {};
+    for (const allowedField of allowedFields) {
+      if (req.body[allowedField]) {
+        userData[allowedField] = req.body[allowedField];
+      }
+    }
+
+    if (Object.entries(userData).length === 0) {
+      throw new InvalidParamError('At least one field to update must be provided');
+    }
 
     const signedUser = req.authUser;
-    const updatedUser = await this.updateUser.execute(signedUser, { name });
+    const updatedUser = await this.updateUser.execute(signedUser, userData);
 
     return new SuccessResponse(updatedUser);
   }
