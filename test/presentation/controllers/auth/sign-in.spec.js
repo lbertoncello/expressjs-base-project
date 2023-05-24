@@ -1,9 +1,9 @@
 import { jest } from '@jest/globals';
-import SignInController from '../../../src/presentation/controllers/auth/sign-in.js';
-import MissingParamError from '../../../src/presentation/errors/missing-param-error.js';
-import InvalidParamError from '../../../src/presentation/errors/invalid-param-error.js';
-import ClientError from '../../../src/presentation/errors/client-error.js';
-import SuccessResponse from '../../../src/presentation/responses/success-response.js';
+import SignInController from '../../../../src/presentation/controllers/auth/sign-in.js';
+import MissingParamError from '../../../../src/presentation/errors/missing-param-error.js';
+import InvalidParamError from '../../../../src/presentation/errors/invalid-param-error.js';
+import ClientError from '../../../../src/presentation/errors/client-error.js';
+import SuccessResponse from '../../../../src/presentation/responses/success-response.js';
 
 const makeFakeSignIn = () => ({
   token: 'valid_token',

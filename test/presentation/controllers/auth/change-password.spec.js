@@ -1,10 +1,10 @@
 import { jest } from '@jest/globals';
-import ChangePasswordController from '../../../src/presentation/controllers/auth/change-password.js';
-import MissingParamError from '../../../src/presentation/errors/missing-param-error.js';
-import InvalidParamError from '../../../src/presentation/errors/invalid-param-error.js';
-import ClientError from '../../../src/presentation/errors/client-error.js';
-import ApplicationError from '../../../src/presentation/errors/application-error.js';
-import SuccessResponse from '../../../src/presentation/responses/success-response.js';
+import ChangePasswordController from '../../../../src/presentation/controllers/auth/change-password.js';
+import MissingParamError from '../../../../src/presentation/errors/missing-param-error.js';
+import InvalidParamError from '../../../../src/presentation/errors/invalid-param-error.js';
+import ClientError from '../../../../src/presentation/errors/client-error.js';
+import ApplicationError from '../../../../src/presentation/errors/application-error.js';
+import SuccessResponse from '../../../../src/presentation/responses/success-response.js';
 
 const makeFakeChangePassword = () => ({
   updated: true,

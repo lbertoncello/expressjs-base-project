@@ -1,8 +1,8 @@
 import { jest } from '@jest/globals';
-import SignUpController from '../../../src/presentation/controllers/auth/sign-up.js';
-import MissingParamError from '../../../src/presentation/errors/missing-param-error.js';
-import InvalidParamError from '../../../src/presentation/errors/invalid-param-error.js';
-import SuccessResponse from '../../../src/presentation/responses/success-response.js';
+import SignUpController from '../../../../src/presentation/controllers/auth/sign-up.js';
+import MissingParamError from '../../../../src/presentation/errors/missing-param-error.js';
+import InvalidParamError from '../../../../src/presentation/errors/invalid-param-error.js';
+import SuccessResponse from '../../../../src/presentation/responses/success-response.js';
 
 const makeFakeUser = () => ({
   id: 'valid_id',

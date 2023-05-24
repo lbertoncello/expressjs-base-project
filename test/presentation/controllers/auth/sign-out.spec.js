@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals';
-import SignOutController from '../../../src/presentation/controllers/auth/sign-out.js';
-import SuccessResponse from '../../../src/presentation/responses/success-response.js';
+import SignOutController from '../../../../src/presentation/controllers/auth/sign-out.js';
+import SuccessResponse from '../../../../src/presentation/responses/success-response.js';
 
 const makeFakeSignOut = () => ({
   token: null,
