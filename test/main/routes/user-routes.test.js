@@ -13,15 +13,15 @@ describe('User Routes', () => {
     await request(app).post('/api/v1/auth/signup').send({
       name: 'Lucas',
       email: 'lucas@mail.com',
-      password: '123',
-      passwordConfirmation: '123',
+      password: 'sTronG_password!1',
+      passwordConfirmation: 'sTronG_password!1',
     });
 
     const res = await request(app)
       .post('/api/v1/auth/signin')
       .send({
         email: 'lucas@mail.com',
-        password: '123',
+        password: 'sTronG_password!1',
       })
       .expect(200);
     const jwtAdapter = new JwtAdapter(envConfig.secrets.jwt, envConfig.secrets.jwtExp);

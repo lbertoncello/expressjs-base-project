@@ -9,6 +9,7 @@ import ChangePassword from '../../use-cases/auth/change-password.js';
 import UserDatabase from '../../data-access/database/user-database.js';
 import UserRepository from '../../data-access/repositories/user-repository.js';
 import EmailValidatorAdapter from '../../presentation/validation/email-validator-adapter.js';
+import PasswordValidatorAdapter from '../../presentation/validation/password-validator-adapter.js';
 import BcryptAdapter from '../../data-access/auth/bcrypt-adapter.js';
 import JwtAdapter from '../../data-access/auth/jwt-adapter.js';
 import envConfig from '../config/env/env.js';
@@ -17,9 +18,10 @@ export const makeSignUpController = () => {
   const database = new UserDatabase();
   const repository = new UserRepository(database);
   const emailValidatorAdapter = new EmailValidatorAdapter();
+  const passwordValidatorAdapter = new PasswordValidatorAdapter();
   const bcryptAdapter = new BcryptAdapter();
   const signUp = new SignUp(repository, bcryptAdapter);
-  const controller = new SignUpController(signUp, emailValidatorAdapter);
+  const controller = new SignUpController(signUp, emailValidatorAdapter, passwordValidatorAdapter);
 
   return controller;
 };
@@ -48,7 +50,8 @@ export const makeChangePasswordController = () => {
   const repository = new UserRepository(database);
   const bcryptAdapter = new BcryptAdapter();
   const changePassword = new ChangePassword(repository, bcryptAdapter);
-  const controller = new ChangePasswordController(changePassword);
+  const passwordValidatorAdapter = new PasswordValidatorAdapter();
+  const controller = new ChangePasswordController(changePassword, passwordValidatorAdapter);
 
   return controller;
 };

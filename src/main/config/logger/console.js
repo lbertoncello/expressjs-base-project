@@ -1,6 +1,7 @@
 import envConfig from '../env/env.js';
 import { format } from 'winston';
 
+// TODO avoid showing log messages on tests
 const errorFormat = format.printf((info) => {
   const sym = Object.getOwnPropertySymbols(info).find((s) => {
     return String(s) === 'Symbol(message)';

@@ -2,6 +2,7 @@ import { jest } from '@jest/globals';
 import AddGameController from '../../../../src/presentation/controllers/game/add-game.js';
 import MissingParamError from '../../../../src/presentation/errors/missing-param-error.js';
 import SuccessResponse from '../../../../src/presentation/responses/success-response.js';
+import InvalidParamError from '../../../../src/presentation/errors/invalid-param-error.js';
 
 const makeFakeAddGameResponse = () => ({
   id: 'valid_id',
@@ -24,6 +25,16 @@ const makeFakeRequest = () => ({
   },
 });
 
+const makeFloatValidatorStub = () => {
+  class FloatValidatorStub {
+    isValid(value) {
+      return true;
+    }
+  }
+
+  return new FloatValidatorStub();
+};
+
 const makeAddGame = () => {
   class AddGameStub {
     async execute(gameData) {
@@ -36,11 +47,13 @@ const makeAddGame = () => {
 
 const makeSut = () => {
   const addGameStub = makeAddGame();
-  const sut = new AddGameController(addGameStub);
+  const floatValidatorStub = makeFloatValidatorStub();
+  const sut = new AddGameController(addGameStub, floatValidatorStub);
 
   return {
     sut,
     addGameStub,
+    floatValidatorStub,
   };
 };
 
@@ -82,6 +95,40 @@ describe('Add Game Controller', () => {
     const promise = sut.handle(httpRequest);
 
     expect(promise).rejects.toEqual(new MissingParamError('summary'));
+  });
+
+  test('Should return an error if rating has the wrong type', async () => {
+    const { sut, floatValidatorStub } = makeSut();
+    const httpRequest = {
+      body: {
+        title: 'any_title',
+        rating: 'any_string',
+        summary: 'any_summary',
+      },
+    };
+    jest.spyOn(floatValidatorStub, 'isValid').mockReturnValueOnce(false);
+    const promise = sut.handle(httpRequest);
+
+    expect(promise).rejects.toEqual(new InvalidParamError("'rating' must be a float value"));
+  });
+
+  test('Should call FloatValidator with correct value', async () => {
+    const { sut, floatValidatorStub } = makeSut();
+    const isValidSpy = jest.spyOn(floatValidatorStub, 'isValid');
+    const fakeRequest = makeFakeRequest();
+    await sut.handle(fakeRequest);
+
+    expect(isValidSpy).toHaveBeenCalledWith(fakeRequest.body.rating);
+  });
+
+  test('Should throw an error if FloatValidator throws', async () => {
+    const { sut, floatValidatorStub } = makeSut();
+    jest.spyOn(floatValidatorStub, 'isValid').mockImplementationOnce(() => {
+      throw new Error();
+    });
+    const promise = sut.handle(makeFakeRequest());
+
+    expect(promise).rejects.toEqual(new Error());
   });
 
   test('Should execute the use case AddGame with correct values', async () => {

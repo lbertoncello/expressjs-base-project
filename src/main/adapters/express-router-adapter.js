@@ -1,8 +1,11 @@
+import coerceFieldsToString from '../../utils/coerce-fields-to-string.js';
+
 export const adaptRoute = (handler) => {
   return async (req, res, next) => {
     try {
       const httpRequest = {
-        body: req.body,
+        // Parse all request body field values to string
+        body: coerceFieldsToString(req.body),
         params: req.params,
         authUser: req.authUser,
       };
