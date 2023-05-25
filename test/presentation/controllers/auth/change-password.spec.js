@@ -35,13 +35,25 @@ const makeChangePassword = () => {
   return new ChangePasswordStub();
 };
 
+const makePasswordValidator = () => {
+  class PasswordValidatorStub {
+    isValid(value) {
+      return true;
+    }
+  }
+
+  return new PasswordValidatorStub();
+};
+
 const makeSut = () => {
   const changePasswordStub = makeChangePassword();
-  const sut = new ChangePasswordController(changePasswordStub);
+  const passwordValidatorStub = makePasswordValidator();
+  const sut = new ChangePasswordController(changePasswordStub, passwordValidatorStub);
 
   return {
     sut,
     changePasswordStub,
+    passwordValidatorStub,
   };
 };
 
@@ -115,6 +127,33 @@ describe('Change Password Controller', () => {
     const promise = sut.handle(httpRequest);
 
     expect(promise).rejects.toEqual(new ClientError('The previous password does not match the password provided', 401));
+  });
+
+  test('Should return an error if a weak is provided', async () => {
+    const { sut, passwordValidatorStub } = makeSut();
+    jest.spyOn(passwordValidatorStub, 'isValid').mockReturnValueOnce(false);
+    const promise = sut.handle(makeFakeRequest());
+
+    expect(promise).rejects.toEqual(new InvalidParamError('Your password must be stronger'));
+  });
+
+  test('Should call PasswordValidator with correct password', async () => {
+    const { sut, passwordValidatorStub } = makeSut();
+    const isValidSpy = jest.spyOn(passwordValidatorStub, 'isValid');
+    const fakeRequest = makeFakeRequest();
+    await sut.handle(fakeRequest);
+
+    expect(isValidSpy).toHaveBeenCalledWith(fakeRequest.body.password);
+  });
+
+  test('Should throw an error if PasswordValidator throws', async () => {
+    const { sut, passwordValidatorStub } = makeSut();
+    jest.spyOn(passwordValidatorStub, 'isValid').mockImplementationOnce(() => {
+      throw new Error();
+    });
+    const promise = sut.handle(makeFakeRequest());
+
+    expect(promise).rejects.toEqual(new Error());
   });
 
   test('Should execute the use case ChangePassword with correct values', async () => {

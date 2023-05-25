@@ -10,7 +10,7 @@ export default class SignUpController {
     this.passwordValidatorAdapter = passwordValidatorAdapter;
   }
 
-  // TODO add rule to refuse weak passwords
+  // TODO change 'Your password must be stronger' to a message that informs the user about the right password format
   async handle(req) {
     const requiredFields = ['name', 'email', 'password', 'passwordConfirmation'];
     for (const requiredField of requiredFields) {
