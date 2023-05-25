@@ -50,7 +50,8 @@ export const makeChangePasswordController = () => {
   const repository = new UserRepository(database);
   const bcryptAdapter = new BcryptAdapter();
   const changePassword = new ChangePassword(repository, bcryptAdapter);
-  const controller = new ChangePasswordController(changePassword);
+  const passwordValidatorAdapter = new PasswordValidatorAdapter();
+  const controller = new ChangePasswordController(changePassword, passwordValidatorAdapter);
 
   return controller;
 };
